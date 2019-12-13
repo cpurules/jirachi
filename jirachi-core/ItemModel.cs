@@ -5,11 +5,11 @@ using System.Text;
 namespace jirachi_core {
     class ItemModel {
         /// <summary>
-        /// Represents the generation-specific item index
+        /// Represents this item's generation-specific item index
         /// </summary>
         public int ItemId { get; set; }
         /// <summary>
-        /// Represents the generation this item ID is linked to
+        /// Represents the generation this item is linked to
         /// </summary>
         public int Generation { get; set; }
         /// <summary>
