@@ -56,5 +56,9 @@ namespace jirachi_core {
         /// Represents this Pokemon's ability
         /// </summary>
         public int Ability { get; set; }
+        /// <summary>
+        /// Represents whether this Pokemon is in the user's party or in a box/daycare
+        /// </summary>
+        public bool InParty { get; set; }
     }
 }
