@@ -48,6 +48,9 @@ namespace jirachi_core {
         /// Represents the number of slot coins in this game
         /// </summary>
         public int Coins { get; set; }
-
+        /// <summary>
+        /// Represents the Pokedex entries for this game
+        /// </summary>
+        public List<PokedexEntryModel> Pokedex { get; set; }
     }
 }
