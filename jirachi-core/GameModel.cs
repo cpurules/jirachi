@@ -52,5 +52,18 @@ namespace jirachi_core {
         /// Represents the Pokedex entries for this game
         /// </summary>
         public List<PokedexEntryModel> Pokedex { get; set; }
+        /// <summary>
+        /// Represents the player's bag inventory for this game
+        /// </summary>
+        public List<ItemModel> Inventory { get; set; }
+        /// <summary>
+        /// Represents the player's PC inventory for this game
+        /// </summary>
+        public List<ItemModel> PCInventory { get; set; }
+        /// <summary>
+        /// Represents the player's party Pokemon for this game
+        /// </summary>
+        public List<PokemonModel> PartyPokemon { get; set; }
+
     }
 }
