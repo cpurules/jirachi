@@ -30,6 +30,7 @@ namespace jirachi_core {
             saveGame.MinsPlayed = this.ReadMinsPlayed();
             saveGame.SecsPlayed = this.ReadSecsPlayed();
             saveGame.FramesPlayed = this.ReadFramesPlayed();
+            saveGame.RivalName = this.ReadRivalName();
         }
 
         private int ReadMoney() {
@@ -84,8 +85,64 @@ namespace jirachi_core {
             return framesPlayed;
         }
 
+        private string ReadRivalName() {
+            // In Generation 1, rival name is stored in 11 bytes starting at 0x25F6
+            byte[] rivalNameBytes = new byte[11];
+            Array.Copy(this.saveFileBytes, 0x25F6, rivalNameBytes, 0, 11);
+
+            string rivalName = Gen1SaveFileHandler.PkmnTextDecode(rivalNameBytes);
+            return rivalName;
+        }
+
         public void WriteSaveFile(string filePath) {
             throw new NotImplementedException();
+        }
+
+        public static string PkmnTextDecode(byte[] bytes) {
+            // Text is encoded using a propriety format and will require us to convert to English
+            // (source: https://bulbapedia.bulbagarden.net/wiki/Character_encoding_in_Generation_I)
+            Dictionary<int, string> EncodeLookup = new Dictionary<int, string>();
+
+            // Encoding mappings for A-Z and a-z
+            for(int i = 0x80; i < 0x99; i++) {
+                EncodeLookup.Add(i, Char.ConvertFromUtf32(i - 69)); // for A-Z mapping
+                EncodeLookup.Add(i + 0x20, Char.ConvertFromUtf32(i - 48)); // for a-z mapping
+            }
+
+            // Add in the additional special characters
+            EncodeLookup.Add(0x9A, "(");
+            EncodeLookup.Add(0x9B, ")");
+            EncodeLookup.Add(0x9C, ":");
+            EncodeLookup.Add(0x9D, ";");
+            EncodeLookup.Add(0x9E, "[");
+            EncodeLookup.Add(0x9F, "]");
+            EncodeLookup.Add(0xE1, "{pk}");
+            EncodeLookup.Add(0xE2, "{mn}");
+            EncodeLookup.Add(0xE3, "-");
+            EncodeLookup.Add(0xE5, "?");
+            EncodeLookup.Add(0xE6, "!");
+            EncodeLookup.Add(0xEF, "{male}");
+            EncodeLookup.Add(0xF5, "{female}");
+            EncodeLookup.Add(0xF3, "/");
+            EncodeLookup.Add(0xF2, ".");
+            EncodeLookup.Add(0xF4, ",");
+
+            byte stringTerminator = 0x50;
+
+            string decodedText = "";
+            int curByteNum = 0;
+
+            while(curByteNum < bytes.Length) {
+                byte curByte = bytes[curByteNum];
+                if(curByte == stringTerminator) {
+                    break;
+                }
+
+                decodedText += EncodeLookup[Convert.ToInt32(curByte)];
+                curByteNum += 1;
+            }
+
+            return decodedText;
         }
     }
 }
