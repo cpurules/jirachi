@@ -40,5 +40,21 @@ namespace jirachi_core {
         /// Represents this Pokemon's Pokerus infection
         /// </summary>
         public PokerusModel Pokerus { get; set; }
+        /// <summary>
+        /// Represents this Pokemon's personality
+        /// </summary>
+        public int Personality { get; set; }
+        /// <summary>
+        /// Represents this Pokemon's OT ID
+        /// </summary>
+        public int OTID { get; set; }
+        /// <summary>
+        /// Represents the language of the game this Pokemon came from
+        /// </summary>
+        public PokemonLanguage Language { get; set; }
+        /// <summary>
+        /// Represents this Pokemon's ability
+        /// </summary>
+        public int Ability { get; set; }
     }
 }
