@@ -27,11 +27,7 @@ namespace jirachi_core {
         private int ReadMoney() {
             // In Generation 1, money is stored in 3 bytes, beginning at 0x25F3 and stored as binary-encoded decimal
             // (source:  https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Main_Data)
-            int money = 0;
-            for(int i = 0; i < 3; i++) {
-                byte currentByte = this.saveFileBytes[0x25F3 + i];
-                money += Convert.ToInt32(currentByte.ToString("X")) * Convert.ToInt32(Math.Pow(100, 2 - i));
-            }
+            int money = ByteFunctions.ReadBinaryEncodedDecimal(this.saveFileBytes, 0x25F3, 3, true);
 
             return money;
         }
@@ -39,14 +35,12 @@ namespace jirachi_core {
         private int ReadCoins() {
             // In Generation 1, slot coins are stored in 2 bytes, beginning at 0x2850 and stored as binary-encoded decimal
             // (source: https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Main_Data)
-            int coins = 0;
-            for(int i = 0; i < 2; i++) {
-                byte currentByte = this.saveFileBytes[0x2850 + i];
-                coins += Convert.ToInt32(currentByte.ToString("X")) * Convert.ToInt32(Math.Pow(100, 1 - i));
-            }
+            int coins = ByteFunctions.ReadBinaryEncodedDecimal(this.saveFileBytes, 0x2850, 2, true);
 
             return coins;
         }
+
+
 
         public void WriteSaveFile(string filePath) {
             throw new NotImplementedException();
