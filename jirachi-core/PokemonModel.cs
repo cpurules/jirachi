@@ -36,5 +36,9 @@ namespace jirachi_core {
         /// Represents the non-volatile (i.e. out-of-battle) status condition of this Pokemon
         /// </summary>
         public StatusType Status { get; set; }
+        /// <summary>
+        /// Represents this Pokemon's Pokerus infection
+        /// </summary>
+        public PokerusModel Pokerus { get; set; }
     }
 }
