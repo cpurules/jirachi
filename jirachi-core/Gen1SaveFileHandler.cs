@@ -40,7 +40,13 @@ namespace jirachi_core {
             return coins;
         }
 
+        private int ReadTrainerID() {
+            // In Generation 1, player ID is stored in 2 bytes, beginning at 0x2605
+            // (source: https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Main_Data)
+            int trainerId = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2605, 2);
 
+            return trainerId;
+        }
 
         public void WriteSaveFile(string filePath) {
             throw new NotImplementedException();
