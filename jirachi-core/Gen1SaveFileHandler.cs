@@ -21,7 +21,15 @@ namespace jirachi_core {
 
             this.saveFileBytes = File.ReadAllBytes(filePath);
 
-            
+            GameModel saveGame = new GameModel();
+
+            saveGame.TrainerID = this.ReadTrainerID();
+            saveGame.Money = this.ReadMoney();
+            saveGame.Coins = this.ReadCoins();
+            saveGame.HoursPlayed = this.ReadHoursPlayed();
+            saveGame.MinsPlayed = this.ReadMinsPlayed();
+            saveGame.SecsPlayed = this.ReadSecsPlayed();
+            saveGame.FramesPlayed = this.ReadFramesPlayed();
         }
 
         private int ReadMoney() {
@@ -46,6 +54,34 @@ namespace jirachi_core {
             int trainerId = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2605, 2);
 
             return trainerId;
+        }
+
+        private int ReadHoursPlayed() {
+            // In Generation 1, hours played is stored in 1 byte at 0x2CED
+            int hoursPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CED, 1);
+
+            return hoursPlayed;
+        }
+
+        private int ReadMinsPlayed() {
+            // In Generation 1, minutes played is stored in 1 byte at 0x2CEF
+            int minsPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CEF, 1);
+
+            return minsPlayed;
+        }
+
+        private int ReadSecsPlayed() {
+            // In Generation 1, seconds played is stored in 1 byte at 0x2CF0
+            int secsPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CF0, 1);
+
+            return secsPlayed;
+        }
+
+        private int ReadFramesPlayed() {
+            // In Generation 1, frames played is stored in 1 byte at 0x2CF1
+            int framesPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CF1, 1);
+
+            return framesPlayed;
         }
 
         public void WriteSaveFile(string filePath) {
