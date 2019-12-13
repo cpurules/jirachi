@@ -28,5 +28,9 @@ namespace jirachi_core {
         /// Represents the Pokemon's moveset
         /// </summary>
         public List<MoveModel> Moveset { get; set; }
+        /// <summary>
+        /// Represents this Pokemon's held item
+        /// </summary>
+        public ItemModel HeldItem { get; set; }
     }
 }
