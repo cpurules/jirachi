@@ -32,5 +32,9 @@ namespace jirachi_core {
         /// Represents this Pokemon's held item
         /// </summary>
         public ItemModel HeldItem { get; set; }
+        /// <summary>
+        /// Represents the non-volatile (i.e. out-of-battle) status condition of this Pokemon
+        /// </summary>
+        public StatusType Status { get; set; }
     }
 }
