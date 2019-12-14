@@ -14,10 +14,6 @@ namespace jirachi_core {
         /// <param name="bigEndian">Whether the bytes are in Big- or Little-Endian </param>
         /// <returns>The integer value of the series of bytes</returns>
         public static int ReadBytesToInteger(byte[] bytes, int offset, int length, bool bigEndian = true) {
-            if(length > 4) {
-                throw new OverflowException("Reading more than 4 bytes will cause an integer overflow");
-            }
-
             int byteVal = 0;
 
             // We choose to read the smallest bytes first because then we can use the
@@ -37,10 +33,6 @@ namespace jirachi_core {
         }
 
         public static int ReadBinaryEncodedDecimal(byte[] bytes, int offset, int length, bool bigEndian = true) {
-            if(length > 4) {
-                throw new OverflowException("Reading more than 4 bytes may cause an integer overflow");
-            }
-
             int byteVal = 0;
 
             // We choose to read the smallest bytes first
@@ -53,9 +45,13 @@ namespace jirachi_core {
                     currentByte = bytes[offset + byteNum];
                 }
 
-                int currentByteValue = Convert.ToInt32(currentByte.ToString("X"));
-
-                byteVal += currentByteValue * Convert.ToInt32(Math.Pow(100, byteNum));
+                string currentByteHex = currentByte.ToString("X");
+                if(int.TryParse(currentByteHex, out int currentByteValue)) {
+                    byteVal += currentByteValue * Convert.ToInt32(Math.Pow(100, byteNum));
+                }
+                else {
+                    throw new ArgumentOutOfRangeException("Found non-numeric byte: " + currentByteHex);
+                }
             }
 
             return byteVal;
