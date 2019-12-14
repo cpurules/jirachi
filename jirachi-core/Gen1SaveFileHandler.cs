@@ -33,6 +33,7 @@ namespace jirachi_core {
             saveGame.SecsPlayed = this.ReadSecsPlayed();
             saveGame.FramesPlayed = this.ReadFramesPlayed();
             saveGame.RivalName = this.ReadRivalName();
+            saveGame.TrainerName = this.ReadTrainerName();
 
             return saveGame;
         }
@@ -96,6 +97,15 @@ namespace jirachi_core {
 
             string rivalName = Gen1SaveFileHandler.PkmnTextDecode(rivalNameBytes);
             return rivalName;
+        }
+
+        private string ReadTrainerName() {
+            // In Generation 1, trainer name is stored in 11 bytes starting at 0x2598
+            byte[] trainerNameBytes = new byte[11];
+            Array.Copy(this.saveFileBytes, 0x2598, trainerNameBytes, 0, 11);
+
+            string trainerName = Gen1SaveFileHandler.PkmnTextDecode(trainerNameBytes);
+            return trainerName;
         }
 
         public void WriteSaveFile(string filePath) {
