@@ -4,6 +4,12 @@ using System.Text;
 
 namespace jirachi_core {
     public class ItemModel {
+        public ItemModel(int itemId, int quantity, int generation, ItemPocket pocket) {
+            this.ItemId = itemId;
+            this.Quantity = quantity;
+            this.Generation = generation;
+            this.Pocket = pocket;
+        }
         /// <summary>
         /// Represents this item's generation-specific item index
         /// </summary>
