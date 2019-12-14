@@ -15,7 +15,7 @@ namespace jirachi_core {
         /// <returns>The integer value of the series of bytes</returns>
         public static int ReadBytesToInteger(byte[] bytes, int offset, int length, bool bigEndian = true) {
             if(length > 4) {
-                throw new OverflowException("Reading more than 4 bytes will cause an integer overflow")
+                throw new OverflowException("Reading more than 4 bytes will cause an integer overflow");
             }
 
             int byteVal = 0;
@@ -30,7 +30,7 @@ namespace jirachi_core {
                 else {
                     currentByte = bytes[offset + byteNum];
                 }
-                byteVal += 256 * Convert.ToInt32(currentByte);
+                byteVal += Convert.ToInt32(Math.Pow(256, byteNum)) * Convert.ToInt32(currentByte);
             }
 
             return byteVal;
