@@ -200,5 +200,9 @@ namespace jirachi_core {
 
             return new ItemModel(bytes[0], bytes[1], 1, ItemPocket.ItemPocket);
         }
+
+        public static PokemonModel ReadPokemonFromBytes(byte[] bytes) {
+            return null;
+        }
     }
 }
