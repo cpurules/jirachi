@@ -4,6 +4,7 @@ using System.Text;
 
 namespace jirachi_core {
     public enum StatusType {
+        None,
         Burn,
         Freeze,
         Paralysis,
