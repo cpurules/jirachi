@@ -158,5 +158,9 @@ namespace jirachi_core {
 
             return decodedText;
         }
+
+        public static ItemModel ReadItemFromBytes(byte[] bytes) {
+            return null;
+        }
     }
 }
