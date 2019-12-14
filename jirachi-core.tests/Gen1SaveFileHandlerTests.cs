@@ -112,8 +112,12 @@ namespace jirachi_core.tests {
             ItemModel actual = Gen1SaveFileHandler.ReadItemFromBytes(bytes);
 
             // Assert
-            Assert.Equal(actual.ItemId, expectedId);
-            Assert.Equal(actual.Quantity, expectedQuantity);
+            Assert.Equal(expectedId, actual.ItemId);
+            Assert.Equal(expectedQuantity, actual.Quantity);
+
+            // The below will be true for every generation 1 item
+            Assert.Equal(1, actual.Generation);
+            Assert.Equal(ItemPocket.ItemPocket, actual.Pocket);
         }
     }
 }
