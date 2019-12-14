@@ -119,5 +119,28 @@ namespace jirachi_core.tests {
             Assert.Equal(1, actual.Generation);
             Assert.Equal(ItemPocket.ItemPocket, actual.Pocket);
         }
+
+        [Theory]
+        [InlineData(new byte[] { 0x00 })]
+        [InlineData(new byte[] { 0x1A, 0xFF, 0x3B })]
+        public void Gen1SaveFileHandler_WrongByteCountShouldThrow(byte[] bytes) {
+            Assert.Throws<ArgumentException>(() => Gen1SaveFileHandler.ReadItemFromBytes(bytes));
+        }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadInventory() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel Gen1Game = Gen1Save.ReadSaveFile();
+
+            List<ItemModel> actual = Gen1Game.Inventory;
+            ItemModel expectedFirst = new ItemModel(6, 1, 1, ItemPocket.ItemPocket); // Bicycle at top of inventory
+            ItemModel expectedLast = new ItemModel(52, 2, 1, ItemPocket.ItemPocket); // 2 Full Heals at end of inventory
+            ItemModel expectedSixth = new ItemModel(40, 99, 1, ItemPocket.ItemPocket); // 99 Rare Candies at position 6
+
+            Assert.Equal(expectedFirst, actual[0]);
+            Assert.Equal(expectedLast, actual[actual.Count - 1]);
+            Assert.Equal(expectedSixth, actual[5]);
+        }
     }
+
 }
