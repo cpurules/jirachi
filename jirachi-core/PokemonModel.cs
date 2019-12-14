@@ -4,6 +4,23 @@ using System.Text;
 
 namespace jirachi_core {
     public class PokemonModel {
+        public PokemonModel(int nationalDexNumber, string nickname, int level, int xP, int currentHP, List<MoveModel> moveset, ItemModel heldItem, StatusType status, PokerusModel pokerus, int personality, int oTID, PokemonLanguage language, int ability, bool inParty) {
+            NationalDexNumber = nationalDexNumber;
+            Nickname = nickname;
+            Level = level;
+            XP = xP;
+            CurrentHP = currentHP;
+            Moveset = moveset;
+            HeldItem = heldItem;
+            Status = status;
+            Pokerus = pokerus;
+            Personality = personality;
+            OTID = oTID;
+            Language = language;
+            Ability = ability;
+            InParty = inParty;
+        }
+
         /// <summary>
         /// Represents the national dex number of this Pokemon.
         /// </summary>
