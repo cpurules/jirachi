@@ -100,5 +100,20 @@ namespace jirachi_core.tests {
 
             Assert.Equal("ASH", Gen1Game.TrainerName);
         }
+
+        [Theory]
+        [InlineData(new byte[] { 0x0A, 0x63 }, 10, 99)]
+        [InlineData(new byte[] { 0x01, 0x02 }, 1, 2)]
+        [InlineData(new byte[] { 0x00, 0x00 }, 0, 0)]
+        public void Gen1SaveFileHandler_ShouldReadItem(byte[] bytes, int expectedId, int expectedQuantity) {
+            // Arrange
+
+            // Act
+            ItemModel actual = Gen1SaveFileHandler.ReadItemFromBytes(bytes);
+
+            // Assert
+            Assert.Equal(actual.ItemId, expectedId);
+            Assert.Equal(actual.Quantity, expectedQuantity);
+        }
     }
 }
