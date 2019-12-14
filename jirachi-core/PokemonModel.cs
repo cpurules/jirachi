@@ -4,7 +4,7 @@ using System.Text;
 
 namespace jirachi_core {
     public class PokemonModel {
-        public PokemonModel(int nationalDexNumber, string nickname, int level, int xP, int currentHP, List<MoveModel> moveset, ItemModel heldItem, StatusType status, PokerusModel pokerus, int personality, int oTID, PokemonLanguage language, int ability, bool inParty) {
+        public PokemonModel(int nationalDexNumber, string nickname, int level, int xP, int currentHP, List<MoveModel> moveset, ItemModel heldItem, StatusType status, PokerusModel pokerus, int personality, int oTID, PokemonLanguage language, int ability, PokemonLocation location) {
             NationalDexNumber = nationalDexNumber;
             Nickname = nickname;
             Level = level;
@@ -18,7 +18,7 @@ namespace jirachi_core {
             OTID = oTID;
             Language = language;
             Ability = ability;
-            InParty = inParty;
+            Location = location;
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace jirachi_core {
         /// </summary>
         public int Ability { get; set; }
         /// <summary>
-        /// Represents whether this Pokemon is in the user's party or in a box/daycare
+        /// Represents where this Pokemon lives
         /// </summary>
-        public bool InParty { get; set; }
+        public PokemonLocation Location { get; set; }
     }
 }
