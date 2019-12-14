@@ -35,6 +35,7 @@ namespace jirachi_core {
             saveGame.RivalName = this.ReadRivalName();
             saveGame.TrainerName = this.ReadTrainerName();
             saveGame.Inventory = this.ReadInventory();
+            saveGame.PCInventory = this.ReadPCInventory();
 
             return saveGame;
         }
@@ -119,6 +120,22 @@ namespace jirachi_core {
 
             for(int i = 0; i < itemCount; i++) {
                 int offset = 0x25C9 + 1 + 2 * i;
+                inventory.Add(new ItemModel(this.saveFileBytes[offset], this.saveFileBytes[offset + 1], 1, ItemPocket.ItemPocket));
+            }
+
+            return inventory;
+        }
+
+        private List<ItemModel> ReadPCInventory() {
+            // In Generation 1, the PC inventory is stored in 0x68 bytes, starting at 0x27E6
+            // The list format consists of a count byte at 0x00; 2 bytes for each item, which
+            // represent item index and quantity; and a terminator byte 0xFF
+
+            int itemCount = this.saveFileBytes[0x27E6];
+            List<ItemModel> inventory = new List<ItemModel>(itemCount);
+
+            for(int i = 0; i < itemCount; i++) {
+                int offset = 0x27E6 + 1 + 2 * i;
                 inventory.Add(new ItemModel(this.saveFileBytes[offset], this.saveFileBytes[offset + 1], 1, ItemPocket.ItemPocket));
             }
 
