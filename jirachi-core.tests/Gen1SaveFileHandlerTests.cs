@@ -141,6 +141,21 @@ namespace jirachi_core.tests {
             Assert.Equal(expectedLast, actual[actual.Count - 1]);
             Assert.Equal(expectedSixth, actual[5]);
         }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadPCInventory() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel Gen1Game = Gen1Save.ReadSaveFile();
+
+            List<ItemModel> actual = Gen1Game.PCInventory;
+            ItemModel expectedFirst = new ItemModel(212, 1, 1, ItemPocket.ItemPocket); // TM12 at top of PC inventory
+            ItemModel expectedLast = new ItemModel(72, 1, 1, ItemPocket.ItemPocket); // Silph Scope at end of PC inventory
+            ItemModel expected35th = new ItemModel(38, 4, 1, ItemPocket.ItemPocket); // 4 Carbos
+
+            Assert.Equal(expectedFirst, actual[0]);
+            Assert.Equal(expectedLast, actual[actual.Count - 1]);
+            Assert.Equal(expected35th, actual[34]);
+        }
     }
 
 }
