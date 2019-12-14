@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace jirachi_core {
-    interface ISaveFileHandler {
+    public interface ISaveFileHandler {
         void WriteSaveFile(string filePath);
         GameModel ReadSaveFile();
     }
