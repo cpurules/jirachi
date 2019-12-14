@@ -160,7 +160,11 @@ namespace jirachi_core {
         }
 
         public static ItemModel ReadItemFromBytes(byte[] bytes) {
-            return null;
+            if(bytes.Length != 2) {
+                throw new ArgumentException("A Generation 1 item is only 2 bytes");
+            }
+
+            return new ItemModel(bytes[0], bytes[1], 1, ItemPocket.ItemPocket);
         }
     }
 }
