@@ -15,6 +15,7 @@ namespace jirachi_core {
         /// <returns>The integer value of the series of bytes</returns>
         public static int ReadBytesToInteger(byte[] bytes, int offset, int length, bool bigEndian = true) {
             int byteVal = 0;
+            int bytesRead = 0;
 
             // We choose to read the smallest bytes first because then we can use the
             // byteNum variable as our multiplier for sequential bytes
@@ -26,7 +27,16 @@ namespace jirachi_core {
                 else {
                     currentByte = bytes[offset + byteNum];
                 }
-                byteVal += Convert.ToInt32(Math.Pow(256, byteNum)) * Convert.ToInt32(currentByte);
+
+                bytesRead += 1;
+                if(bytesRead > 4) {
+                    if (currentByte != 0) {
+                        throw new OverflowException("Integers can only hold 4 bytes");
+                    }
+                }
+                else {
+                    byteVal += Convert.ToInt32(Math.Pow(256, byteNum)) * Convert.ToInt32(currentByte);
+                }
             }
 
             return byteVal;
@@ -34,6 +44,7 @@ namespace jirachi_core {
 
         public static int ReadBinaryEncodedDecimal(byte[] bytes, int offset, int length, bool bigEndian = true) {
             int byteVal = 0;
+            int bytesRead = 0;
 
             // We choose to read the smallest bytes first
             for(int byteNum = 0; byteNum < length; byteNum++) {
@@ -45,12 +56,20 @@ namespace jirachi_core {
                     currentByte = bytes[offset + byteNum];
                 }
 
-                string currentByteHex = currentByte.ToString("X");
-                if(int.TryParse(currentByteHex, out int currentByteValue)) {
-                    byteVal += currentByteValue * Convert.ToInt32(Math.Pow(100, byteNum));
+                bytesRead += 1;
+                if(bytesRead > 4) {
+                    if (currentByte != 0) {
+                        throw new OverflowException("To prevent overflows, you can only read 4 bytes of data.");
+                    }
                 }
                 else {
-                    throw new ArgumentOutOfRangeException("Found non-numeric byte: " + currentByteHex);
+                    string currentByteHex = currentByte.ToString("X");
+                    if (int.TryParse(currentByteHex, out int currentByteValue)) {
+                        byteVal += currentByteValue * Convert.ToInt32(Math.Pow(100, byteNum));
+                    }
+                    else {
+                        throw new ArgumentOutOfRangeException("Found non-numeric byte: " + currentByteHex);
+                    }
                 }
             }
 
