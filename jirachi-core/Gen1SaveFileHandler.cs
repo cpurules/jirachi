@@ -5,22 +5,24 @@ using System.IO;
 using System.Linq;
 
 namespace jirachi_core {
-    class Gen1SaveFileHandler : ISaveFileHandler {
+    public class Gen1SaveFileHandler : ISaveFileHandler {
         private byte[] saveFileBytes;
 
-        public GameModel ReadSaveFile(string filePath) {
+        public Gen1SaveFileHandler(string filePath) {
             if(!File.Exists(filePath)) {
                 throw new FileNotFoundException("Could not locate file " + filePath);
             }
 
-            // Generation 1 save files are 32KiB, or 2^15 bytes
+            // Generation 1 save file are 32KiB, or 2^15 bytes
             long fileLength = new System.IO.FileInfo(filePath).Length;
-            if(fileLength != Math.Pow(2,15)) {
+            if(fileLength != Math.Pow(2, 15)) {
                 throw new FormatException("File " + filePath + " is not a Gen 1 save file");
             }
 
             this.saveFileBytes = File.ReadAllBytes(filePath);
+        }
 
+        public GameModel ReadSaveFile() {
             GameModel saveGame = new GameModel();
 
             saveGame.TrainerID = this.ReadTrainerID();
