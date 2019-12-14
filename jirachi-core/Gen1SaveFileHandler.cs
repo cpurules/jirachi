@@ -108,6 +108,22 @@ namespace jirachi_core {
             return trainerName;
         }
 
+        private List<ItemModel> ReadInventory() {
+            // In Generation 1, the bag inventory is stored in 0x2A bytes, starting at 0x25C9
+            // The list format consists of a count byte at 0x00; 2 bytes for each item, which
+            // represent item index and quantity; and a terminator byte 0xFF
+
+            int itemCount = this.saveFileBytes[0x25C9];
+            List<ItemModel> inventory = new List<ItemModel>(itemCount);
+
+            for(int i = 0; i < itemCount; i++) {
+                int offset = 0x25C9 + 1 + 2 * i;
+                inventory.Add(new ItemModel(this.saveFileBytes[offset], this.saveFileBytes[offset + 1], 1, ItemPocket.ItemPocket));
+            }
+
+            return inventory;
+        }
+
         public void WriteSaveFile(string filePath) {
             throw new NotImplementedException();
         }
