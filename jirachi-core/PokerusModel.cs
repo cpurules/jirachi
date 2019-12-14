@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace jirachi_core {
-    class PokerusModel {
+    public class PokerusModel {
         /// <summary>
         /// Represents the strain value of this Pokerus infection
         /// </summary>

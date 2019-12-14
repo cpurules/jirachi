@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace jirachi_core {
-    class ItemModel {
+    public class ItemModel {
         /// <summary>
         /// Represents this item's generation-specific item index
         /// </summary>

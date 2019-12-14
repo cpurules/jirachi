@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace jirachi_core {
-    class GameModel {
+    public class GameModel {
         /// <summary>
         /// Represents this game's trainer name
         /// </summary>

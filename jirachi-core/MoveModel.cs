@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace jirachi_core {
-    class MoveModel {
+    public class MoveModel {
         /// <summary>
         /// Represents this move's generation-specific move index
         /// </summary>

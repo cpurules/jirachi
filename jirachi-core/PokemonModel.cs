@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace jirachi_core {
-    class PokemonModel {
+    public class PokemonModel {
         /// <summary>
         /// Represents the national dex number of this Pokemon.
         /// </summary>
