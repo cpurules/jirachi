@@ -26,5 +26,15 @@ namespace jirachi_core {
         /// Represents the quantity of this item
         /// </summary>
         public int Quantity { get; set; }
+
+        public override bool Equals(object obj) {
+            ItemModel item = obj as ItemModel;
+
+            return (item != null)
+                && (this.ItemId == item.ItemId)
+                && (this.Quantity == item.Quantity)
+                && (this.Generation == item.Generation)
+                && (this.Pocket == item.Pocket);
+        }
     }
 }
