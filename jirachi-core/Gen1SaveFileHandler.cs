@@ -34,6 +34,7 @@ namespace jirachi_core {
             saveGame.FramesPlayed = this.ReadFramesPlayed();
             saveGame.RivalName = this.ReadRivalName();
             saveGame.TrainerName = this.ReadTrainerName();
+            saveGame.Inventory = this.ReadInventory();
 
             return saveGame;
         }
