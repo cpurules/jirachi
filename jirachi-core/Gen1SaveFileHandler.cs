@@ -31,6 +31,8 @@ namespace jirachi_core {
             saveGame.SecsPlayed = this.ReadSecsPlayed();
             saveGame.FramesPlayed = this.ReadFramesPlayed();
             saveGame.RivalName = this.ReadRivalName();
+
+            return null;
         }
 
         private int ReadMoney() {
