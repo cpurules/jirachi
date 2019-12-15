@@ -269,6 +269,15 @@ namespace jirachi_core {
             nationalDexNumber = Gen1SaveFileHandler.ReadNationalDexNumberFromPkmnBytes(pokemonDataBytes);
 
             // current HP
+            currentHP = Gen1SaveFileHandler.ReadCurrentHPFromPkmnBytes(pokemonDataBytes);
+
+            // level
+            level = Gen1SaveFileHandler.ReadLevelFromPkmnBytes(pokemonDataBytes);
+
+            // status
+            status = Gen1SaveFileHandler.ReadStatusFromPkmnBytes(pokemonDataBytes);
+
+
 
 
             // return thisPokemon;
@@ -316,6 +325,26 @@ namespace jirachi_core {
             else {
                 throw new ArgumentOutOfRangeException("Unknown value for status type");
             }
+        }
+
+        public static List<MoveModel> ReadMovesetFromPkmnBytes(byte[] bytes) {
+            // Move indexes are stored 0x08-0x0B and PP is stored at 0x1D-0x20
+
+            List<MoveModel> moveset = new List<MoveModel>();
+            for(int move = 0; move < 4; move++) {
+                int moveIndex = bytes[0x08 + move];
+                if(moveIndex == 0) {
+                    break;
+                }
+
+                int movePP = bytes[0x1D + move];
+                int currentPP = movePP & 0b111111;
+                int ppUps = (movePP & 0b11000000) >> 6;
+
+                moveset.Add(new MoveModel(moveIndex, currentPP, ppUps));
+            }
+
+            return moveset;
         }
 
         public static int ConvertIndexToNationalDex(int index) {
