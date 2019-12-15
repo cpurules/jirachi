@@ -4,6 +4,26 @@ using System.Text;
 
 namespace jirachi_core {
     public class PokemonModel {
+        // Constructor for Gen 1 Party Data
+        public PokemonModel(int nationalDexNumber, string nickname, int level, int xp, int currentHP, List<MoveModel> moveset, StatusType status, int otID, PokemonLanguage pokemonLanguage, PokemonLocation location) {
+            this.NationalDexNumber = nationalDexNumber;
+            this.Nickname = nickname;
+            this.Level = level;
+            this.XP = xp;
+            this.CurrentHP = currentHP;
+            this.Moveset = moveset;
+            this.HeldItem = null;
+            this.Status = status;
+            this.Pokerus = null;
+            this.Personality = 0;
+            this.OTID = otID;
+            this.Language = Language;
+            this.Ability = 0;
+            this.Location = location;
+        }
+
+        // Constructor for Gen 1 Box Data - coming soon...
+
         public PokemonModel(int nationalDexNumber, string nickname, int level, int xP, int currentHP, List<MoveModel> moveset, ItemModel heldItem, StatusType status, PokerusModel pokerus, int personality, int oTID, PokemonLanguage language, int ability, PokemonLocation location) {
             NationalDexNumber = nationalDexNumber;
             Nickname = nickname;
