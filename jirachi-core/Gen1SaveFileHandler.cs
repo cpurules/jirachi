@@ -278,7 +278,7 @@ namespace jirachi_core {
         public static int ReadNationalDexNumberFromPkmnBytes(byte[] bytes) {
             int gen1Index = bytes[0x0];
 
-            int nationalDexId;
+            int nationalDexId = 0;
             // lookup... to do...
             return nationalDexId;
         }
