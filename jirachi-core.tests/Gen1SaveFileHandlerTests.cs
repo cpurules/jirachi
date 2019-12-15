@@ -225,7 +225,33 @@ namespace jirachi_core.tests {
 
             Assert.Equal(magmarBox12Expected, magmarBox12Actual);
             Assert.Equal(mewPartyExpected, mewPartyActual);
+
+
+            byte[] magmarDaycare = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x2D0B, magmarDaycare, 0, 33);
+
+            List<MoveModel> magmarDaycareExpected = new List<MoveModel>();
+            magmarDaycareExpected.Add(new MoveModel(52, 25, 0));
+            List<MoveModel> magmarDaycareActual = Gen1SaveFileHandler.ReadMovesetFromPkmnBytes(magmarDaycare);
+
+            Assert.Equal(magmarDaycareExpected, magmarDaycareActual);
+        }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadOTID() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+
+            byte[] magmarBox12 = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
+            int magmarBoxExpected = 20893;
+            int magmarBoxActual = Gen1SaveFileHandler.ReadOTIDFromPkmnBytes(magmarBox12);
+            Assert.Equal(magmarBoxExpected, magmarBoxActual);
+
+            byte[] machampBox12 = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16 + 33, machampBox12, 0, 33);
+            int machampBoxExpected = 17178;
+            int machampBoxActual = Gen1SaveFileHandler.ReadOTIDFromPkmnBytes(machampBox12);
+            Assert.Equal(machampBoxExpected, machampBoxActual);
         }
     }
-
 }
