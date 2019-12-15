@@ -176,6 +176,19 @@ namespace jirachi_core.tests {
             Assert.Equal(magmarBox12Expected, magmarBox12Actual);
             Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
         }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadLevel() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+
+            // Box 6 starts at 0x55EA
+            byte[] persianBox6 = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x55EA + 0x16 + (33 * 2), persianBox6, 0, 33);
+            int persianExpected = 70;
+            int persianActual = Gen1SaveFileHandler.ReadLevelFromPkmnBytes(persianBox6);
+
+            Assert.Equal(persianExpected, persianActual);
+        }
     }
 
 }
