@@ -36,5 +36,14 @@ namespace jirachi_core {
                 && (this.Generation == item.Generation)
                 && (this.Pocket == item.Pocket);
         }
+
+        public override int GetHashCode() {
+            var hashCode = 1392143361;
+            hashCode = hashCode * -1521134295 + ItemId.GetHashCode();
+            hashCode = hashCode * -1521134295 + Generation.GetHashCode();
+            hashCode = hashCode * -1521134295 + Pocket.GetHashCode();
+            hashCode = hashCode * -1521134295 + Quantity.GetHashCode();
+            return hashCode;
+        }
     }
 }
