@@ -156,6 +156,26 @@ namespace jirachi_core.tests {
             Assert.Equal(expectedLast, actual[actual.Count - 1]);
             Assert.Equal(expected35th, actual[34]);
         }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadCurrentHP() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+
+            // Box 12 starts at 0x75EA
+            byte[] magmarBox12 = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
+            int magmarBox12Expected = 179;
+            int magmarBox12Actual = Gen1SaveFileHandler.ReadCurrentHPFromPkmnBytes(magmarBox12);
+
+            // Party starts at 0x2F2C
+            byte[] mewPartySlot1 = new byte[44];
+            Array.Copy(Gen1Save.saveFileBytes, 0x2F2C + 0x8, mewPartySlot1, 0, 44);
+            int mewPartySlot1Expected = 260;
+            int mewPartySlot1Actual = Gen1SaveFileHandler.ReadCurrentHPFromPkmnBytes(mewPartySlot1);
+
+            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
+            Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
+        }
     }
 
 }
