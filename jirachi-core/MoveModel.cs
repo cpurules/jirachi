@@ -4,6 +4,12 @@ using System.Text;
 
 namespace jirachi_core {
     public class MoveModel {
+        public MoveModel(int moveId, int currentPP, int pPUps) {
+            MoveId = moveId;
+            CurrentPP = currentPP;
+            PPUps = pPUps;
+        }
+
         /// <summary>
         /// Represents this move's generation-specific move index
         /// </summary>
