@@ -201,8 +201,127 @@ namespace jirachi_core {
             return new ItemModel(bytes[0], bytes[1], 1, ItemPocket.ItemPocket);
         }
 
-        public static PokemonModel ReadPokemonFromBytes(byte[] bytes) {
+        public static PokemonModel ReadPokemonFromBytes(byte[] bytes, PokemonLocation location, int index) {
+            if(location == PokemonLocation.Daycare && index != 0) {
+                throw new ArgumentOutOfRangeException("Only one daycare Pokemon in Gen 1");
+            }
+
+            // We need to create some holders for all of our properties, since
+            // daycare v.s. party/box have different structures.
+
+            byte[] pokemonDataBytes;
+
+            int nationalDexNumber;
+            string nickname;
+            int level;
+            int xp;
+            int currentHP;
+            List<MoveModel> moveset;
+            StatusType status;
+            int OTID;
+
+            if(location == PokemonLocation.Daycare) {
+                // Daycare data needs to be exactly 55 bytes long
+                if(bytes.Length != 55) {
+                    throw new ArgumentException("Daycare pokemon should be 55 bytes");
+                }
+
+                byte[] nicknameBytes = new byte[11];
+                Array.Copy(bytes, nicknameBytes, 11);
+                nickname = Gen1SaveFileHandler.PkmnTextDecode(nicknameBytes);
+
+                pokemonDataBytes = new byte[33];
+                Array.Copy(bytes, 22, pokemonDataBytes, 0, 33);
+            }
+            else {
+                int dataLength;
+                int nicknameStart;
+                int dataStart;
+
+                if(location == PokemonLocation.Box) {
+                    // Box data needs to be exactly 1,142 bytes long
+                    if(bytes.Length != 1142) {
+                        throw new ArgumentException("You need to provide the full box data");
+                    }
+                    dataLength = 33;
+                    nicknameStart = 0x386;
+                    dataStart = 0x16;
+                }
+                else {
+                    // Party data needs to be exactly 404 bytes long
+                    if(bytes.Length != 404) {
+                        throw new ArgumentException("You need to provide the full party data");
+                    }
+                    dataLength = 44;
+                    nicknameStart = 0x152;
+                    dataStart = 0x8;
+                }
+
+                byte[] nicknameBytes = new byte[11];
+                Array.Copy(bytes, nicknameStart + (index * 0xB), nicknameBytes, 0, 11);
+                nickname = Gen1SaveFileHandler.PkmnTextDecode(nicknameBytes);
+
+                pokemonDataBytes = new byte[dataLength];
+                Array.Copy(bytes, dataStart + (index * dataLength), pokemonDataBytes, 0, dataLength);
+            }
+
+            // national dex id
+            nationalDexNumber = Gen1SaveFileHandler.ReadNationalDexNumberFromPkmnBytes(pokemonDataBytes);
+
+            // current HP
+
+
+            // return thisPokemon;
             return null;
+        }
+
+        public static int ReadNationalDexNumberFromPkmnBytes(byte[] bytes) {
+            int gen1Index = bytes[0x0];
+
+            int nationalDexId;
+            // lookup... to do...
+            return nationalDexId;
+        }
+
+        public static int ReadCurrentHPFromPkmnBytes(byte[] bytes) {
+            int currentHP = ByteFunctions.ReadBytesToInteger(bytes, 0x1, 2);
+            return currentHP;
+        }
+
+        public static int ReadLevelFromPkmnBytes(byte[] bytes) {
+            int level = bytes[0x3];
+            return level;
+        }
+
+        public static StatusType ReadStatusFromPkmnBytes(byte[] bytes) {
+            int status = bytes[0x4];
+            if (status == 0b0) {
+                return StatusType.None;
+            }
+            else if (status == 0b100) {
+                return StatusType.Sleep;
+            }
+            else if (status == 0b1000) {
+                return StatusType.Poison;
+            }
+            else if (status == 0b10000) {
+                return StatusType.Burn;
+            }
+            else if (status == 0b100000) {
+                return StatusType.Freeze;
+            }
+            else if (status == 0b1000000) {
+                return StatusType.Paralysis;
+            }
+            else {
+                throw new ArgumentOutOfRangeException("Unknown value for status type");
+            }
+        }
+
+        public static int ConvertIndexToNationalDex(int index) {
+            // source: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
+
+            Dictionary<int, int> NationalDexLookup = new Dictionary<int, int>();
         }
     }
 }
