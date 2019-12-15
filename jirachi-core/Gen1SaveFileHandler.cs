@@ -322,6 +322,8 @@ namespace jirachi_core {
             // source: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
 
             Dictionary<int, int> NationalDexLookup = new Dictionary<int, int>();
+
+            return 0; // stump
         }
     }
 }
