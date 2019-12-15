@@ -11,10 +11,6 @@ namespace jirachi_core {
         /// <summary>
         /// Represents the generation this move is linked to
         /// </summary>
-        public int Generation { get; set; }
-        /// <summary>
-        /// Represents the current PP for this move
-        /// </summary>
         public int CurrentPP { get; set; }
         /// <summary>
         /// Represents the number of PP Ups applied to this move
