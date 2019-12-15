@@ -353,6 +353,12 @@ namespace jirachi_core {
             return OTID;
         }
 
+        public static int ReadXPFromPkmnBytes(byte[] bytes) {
+            // XP is at 0x0E-0x10
+            int XP = ByteFunctions.ReadBytesToInteger(bytes, 0xE, 3);
+            return XP;
+        }
+
         public static int ConvertIndexToNationalDex(int index) {
             // source: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
 
