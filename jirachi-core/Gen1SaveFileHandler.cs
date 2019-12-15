@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace jirachi_core {
     public class Gen1SaveFileHandler : ISaveFileHandler {
-        private byte[] saveFileBytes;
+        public byte[] saveFileBytes;
 
         public Gen1SaveFileHandler(string filePath) {
             if(!File.Exists(filePath)) {
