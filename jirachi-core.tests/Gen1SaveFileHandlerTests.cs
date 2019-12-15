@@ -253,5 +253,22 @@ namespace jirachi_core.tests {
             int machampBoxActual = Gen1SaveFileHandler.ReadOTIDFromPkmnBytes(machampBox12);
             Assert.Equal(machampBoxExpected, machampBoxActual);
         }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadXP() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+
+            byte[] magmarBox12 = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
+            int magmarBoxExpected = 274925;
+            int magmarBoxActual = Gen1SaveFileHandler.ReadXPFromPkmnBytes(magmarBox12);
+            Assert.Equal(magmarBoxExpected, magmarBoxActual);
+
+            byte[] persianBox6 = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x55EA + 0x16 + (33 * 2), persianBox6, 0, 33);
+            int persianExpected = 343000;
+            int persianActual = Gen1SaveFileHandler.ReadXPFromPkmnBytes(persianBox6);
+            Assert.Equal(persianExpected, persianActual);
+        }
     }
 }
