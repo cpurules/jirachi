@@ -347,6 +347,12 @@ namespace jirachi_core {
             return moveset;
         }
 
+        public static int ReadOTIDFromPkmnBytes(byte[] bytes) {
+            // OTID is at 0xC-0xD
+            int OTID = ByteFunctions.ReadBytesToInteger(bytes, 0xC, 2);
+            return OTID;
+        }
+
         public static int ConvertIndexToNationalDex(int index) {
             // source: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
 
