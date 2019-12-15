@@ -189,6 +189,43 @@ namespace jirachi_core.tests {
 
             Assert.Equal(persianExpected, persianActual);
         }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadStatus() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+
+            // We're going to write these later...
+            // PkHex doesn't display the status so will need to load up the game..
+        }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadMoveset() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            
+            byte[] magmarBox12 = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
+
+            List<MoveModel> magmarBox12Expected = new List<MoveModel>();
+            magmarBox12Expected.Add(new MoveModel(52, 25, 0));
+            magmarBox12Expected.Add(new MoveModel(126, 5, 0));
+            magmarBox12Expected.Add(new MoveModel(53, 15, 0));
+            magmarBox12Expected.Add(new MoveModel(7, 15, 0));
+            List<MoveModel> magmarBox12Actual = Gen1SaveFileHandler.ReadMovesetFromPkmnBytes(magmarBox12);
+
+
+            byte[] mewPartySlot1 = new byte[44];
+            Array.Copy(Gen1Save.saveFileBytes, 0x2F2C + 0x8, mewPartySlot1, 0, 44);
+
+            List<MoveModel> mewPartyExpected = new List<MoveModel>();
+            mewPartyExpected.Add(new MoveModel(105, 32, 3));
+            mewPartyExpected.Add(new MoveModel(5, 32, 3));
+            mewPartyExpected.Add(new MoveModel(94, 16, 3));
+            mewPartyExpected.Add(new MoveModel(144, 16, 3));
+            List<MoveModel> mewPartyActual = Gen1SaveFileHandler.ReadMovesetFromPkmnBytes(mewPartySlot1);
+
+            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
+            Assert.Equal(mewPartyExpected, mewPartyActual);
+        }
     }
 
 }
