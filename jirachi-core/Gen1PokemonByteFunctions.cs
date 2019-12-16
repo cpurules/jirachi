@@ -79,6 +79,15 @@ namespace jirachi_core {
             return XP;
         }
 
+        public static List<StatModel> ReadStatsFromPkmnBytes(byte[] bytes) {
+            // only valid for party data
+            if(bytes.Length != 44) {
+                throw new ArgumentException("Stats are only available in party Pokemon bytes");
+            }
+
+            return null;
+        }
+
         public static int ConvertIndexToNationalDex(int index) {
             // source: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
 
