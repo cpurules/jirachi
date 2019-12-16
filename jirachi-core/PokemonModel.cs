@@ -6,6 +6,7 @@ namespace jirachi_core {
     public class PokemonModel {
         // Constructor for Gen 1 Party Data
         public PokemonModel(int nationalDexNumber, string nickname, int level, int xp, int currentHP, List<MoveModel> moveset, StatusType status, int otID, PokemonLocation location, List<StatModel> stats) {
+            Generation = 1;
             this.NationalDexNumber = nationalDexNumber;
             this.Nickname = nickname;
             this.Level = level;
@@ -42,6 +43,7 @@ namespace jirachi_core {
             Location = location;
         }
 
+        public int Generation { get; set; }
         /// <summary>
         /// Represents the national dex number of this Pokemon.
         /// </summary>
