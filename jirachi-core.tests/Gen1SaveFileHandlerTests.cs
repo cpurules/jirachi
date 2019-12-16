@@ -156,5 +156,26 @@ namespace jirachi_core.tests {
             Assert.Equal(expectedLast, actual[actual.Count - 1]);
             Assert.Equal(expected35th, actual[34]);
         }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadPokemonFromFullBytes() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            byte[] saveFileBytes = Gen1Save.saveFileBytes;
+
+            byte[] partyBytes = new byte[0x194];
+            Array.Copy(saveFileBytes, 0x2F2C, partyBytes, 0, 0x194);
+
+            byte[] box12Bytes = new byte[0x462];
+            Array.Copy(saveFileBytes, 0x75EA, box12Bytes, 0, 0x462);
+
+            // Arrange
+
+            // Act
+            PokemonModel mewPartySlot1Actual = Gen1SaveFileHandler.ReadPokemonFromBytes(partyBytes, PokemonLocation.Party, 0);
+            PokemonModel machampBox12Actual = Gen1SaveFileHandler.ReadPokemonFromBytes(box12Bytes, PokemonLocation.Box, 2);
+
+            // Assert
+
+        }
     }
 }
