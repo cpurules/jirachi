@@ -137,14 +137,35 @@ namespace jirachi_core.tests {
             StatModel mewSpdExpected = new StatModel(StatType.Speed, 192, 14, 25648);
             StatModel mewSpcExpected = new StatModel(StatType.Special, 188, 11, 25648);
 
+            List<StatModel> mewStatsExpected = new List<StatModel>();
+            mewStatsExpected.Add(mewHPExpected);
+            mewStatsExpected.Add(mewAtkExpected);
+            mewStatsExpected.Add(mewDefExpected);
+            mewStatsExpected.Add(mewSpdExpected);
+            mewStatsExpected.Add(mewSpcExpected);
             List<StatModel> mewStatsActual = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(mewPartySlot1);
 
-            // Gen 1 stats byte order is HP, Atk, Def, Spd, Spc
-            Assert.Equal(mewHPExpected, mewStatsActual[0]);
-            Assert.Equal(mewAtkExpected, mewStatsActual[1]);
-            Assert.Equal(mewDefExpected, mewStatsActual[2]);
-            Assert.Equal(mewSpdExpected, mewStatsActual[3]);
-            Assert.Equal(mewSpcExpected, mewStatsActual[4]);
+            Assert.True(mewStatsExpected.SequenceEqual(mewStatsActual));
+
+
+            byte[] magmarDaycare = new byte[33];
+            Array.Copy(Gen1Save.saveFileBytes, 0x2D0B, magmarDaycare, 0, 33);
+
+            StatModel magmarHPExpected = new StatModel(StatType.HP, 11, 0);
+            StatModel magmarAtkExpected = new StatModel(StatType.Attack, 1, 0);
+            StatModel magmarDefExpected = new StatModel(StatType.Defense, 0, 0);
+            StatModel magmarSpdExpected = new StatModel(StatType.Speed, 15, 0);
+            StatModel magmarSpcExpected = new StatModel(StatType.Special, 7, 0);
+
+            List<StatModel> magmarStatsExpected = new List<StatModel>();
+            magmarStatsExpected.Add(magmarHPExpected);
+            magmarStatsExpected.Add(magmarAtkExpected);
+            magmarStatsExpected.Add(magmarDefExpected);
+            magmarStatsExpected.Add(magmarSpdExpected);
+            magmarStatsExpected.Add(magmarSpcExpected);
+            List<StatModel> magmarStatsActual = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(magmarDaycare);
+
+            Assert.True(magmarStatsExpected.SequenceEqual(magmarStatsActual));
         }
     }
 }
