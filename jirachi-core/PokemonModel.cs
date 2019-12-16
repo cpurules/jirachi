@@ -104,5 +104,46 @@ namespace jirachi_core {
         /// Represents this Pokemon's stats
         /// </summary>
         public List<StatModel> Stats { get; set; }
+
+        public override bool Equals(object obj) {
+            return obj is PokemonModel model &&
+                   Generation == model.Generation &&
+                   NationalDexNumber == model.NationalDexNumber &&
+                   Nickname == model.Nickname &&
+                   Level == model.Level &&
+                   XP == model.XP &&
+                   CurrentHP == model.CurrentHP &&
+                   EqualityComparer<List<MoveModel>>.Default.Equals(Moveset, model.Moveset) &&
+                   EqualityComparer<ItemModel>.Default.Equals(HeldItem, model.HeldItem) &&
+                   Status == model.Status &&
+                   EqualityComparer<PokerusModel>.Default.Equals(Pokerus, model.Pokerus) &&
+                   Personality == model.Personality &&
+                   OTID == model.OTID &&
+                   Language == model.Language &&
+                   Ability == model.Ability &&
+                   Location == model.Location &&
+                   EqualityComparer<List<StatModel>>.Default.Equals(Stats, model.Stats);
+        }
+
+        public override int GetHashCode() {
+            var hashCode = 597855731;
+            hashCode = hashCode * -1521134295 + Generation.GetHashCode();
+            hashCode = hashCode * -1521134295 + NationalDexNumber.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Nickname);
+            hashCode = hashCode * -1521134295 + Level.GetHashCode();
+            hashCode = hashCode * -1521134295 + XP.GetHashCode();
+            hashCode = hashCode * -1521134295 + CurrentHP.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<MoveModel>>.Default.GetHashCode(Moveset);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ItemModel>.Default.GetHashCode(HeldItem);
+            hashCode = hashCode * -1521134295 + Status.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<PokerusModel>.Default.GetHashCode(Pokerus);
+            hashCode = hashCode * -1521134295 + Personality.GetHashCode();
+            hashCode = hashCode * -1521134295 + OTID.GetHashCode();
+            hashCode = hashCode * -1521134295 + Language.GetHashCode();
+            hashCode = hashCode * -1521134295 + Ability.GetHashCode();
+            hashCode = hashCode * -1521134295 + Location.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<List<StatModel>>.Default.GetHashCode(Stats);
+            return hashCode;
+        }
     }
 }
