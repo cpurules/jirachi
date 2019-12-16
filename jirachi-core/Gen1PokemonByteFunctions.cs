@@ -18,7 +18,14 @@ namespace jirachi_core {
         }
 
         public static int ReadLevelFromPkmnBytes(byte[] bytes) {
-            int level = bytes[0x3];
+            int level;
+            if (bytes.Length == 33) {
+                level = bytes[0x3];
+            }
+            else {
+                level = bytes[0x21];
+            }
+            
             return level;
         }
 
