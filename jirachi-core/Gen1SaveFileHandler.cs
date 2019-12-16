@@ -277,7 +277,14 @@ namespace jirachi_core {
             // status
             status = Gen1PokemonByteFunctions.ReadStatusFromPkmnBytes(pokemonDataBytes);
 
+            // moveset
+            moveset = Gen1PokemonByteFunctions.ReadMovesetFromPkmnBytes(pokemonDataBytes);
 
+            // OT ID
+            OTID = Gen1PokemonByteFunctions.ReadOTIDFromPkmnBytes(pokemonDataBytes);
+
+            // xp
+            xp = Gen1PokemonByteFunctions.ReadXPFromPkmnBytes(pokemonDataBytes);
 
 
             // return thisPokemon;
