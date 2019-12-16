@@ -8,43 +8,53 @@ using Xunit;
 
 namespace jirachi_core.tests {
     public class Gen1PokemonByteFunctionsTests {
-        string pathToDemoSave = "C:\\Users\\cpuru\\Downloads\\TEST_BLUE_SAVE.sav";
+        private byte[] mewPartySlot1 = new byte[44];
+        private byte[] persianBox6 = new byte[33];
+        private byte[] machampBox12 = new byte[33];
+        private byte[] magmarBox12 = new byte[33];
+        private byte[] magmarDaycare = new byte[33];
+        private string pathToDemoSave = "C:\\Users\\cpuru\\Downloads\\TEST_BLUE_SAVE.sav";
+
+        public Gen1PokemonByteFunctionsTests() {
+            string pathToDemoSave = "C:\\Users\\cpuru\\Downloads\\TEST_BLUE_SAVE.sav";
+            Gen1SaveFileHandler demoSave = new Gen1SaveFileHandler(pathToDemoSave);
+            byte[] demoSaveBytes = demoSave.saveFileBytes;
+
+            Array.Copy(demoSaveBytes, 0x2F2C + 0x08, this.mewPartySlot1, 0, 44); // mew party slot 1
+            Array.Copy(demoSaveBytes, 0x55EA + 0x16 + (33 * 2), this.persianBox6, 0, 33); // persian box 6
+            Array.Copy(demoSaveBytes, 0x75EA + 0x16 + 33, this.machampBox12, 0, 33); // machamp box 12
+            Array.Copy(demoSaveBytes, 0x75EA + 0x16, this.magmarBox12, 0, 33); // magmar box 12
+            Array.Copy(demoSaveBytes, 0x2D0B, this.magmarDaycare, 0, 33); // magmar in daycare
+        }        
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadCurrentHP() {
-            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
-
-            // Box 12 starts at 0x75EA
-            byte[] magmarBox12 = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
-            int magmarBox12Expected = 179;
-            int magmarBox12Actual = Gen1PokemonByteFunctions.ReadCurrentHPFromPkmnBytes(magmarBox12);
-
-            // Party starts at 0x2F2C
-            byte[] mewPartySlot1 = new byte[44];
-            Array.Copy(Gen1Save.saveFileBytes, 0x2F2C + 0x8, mewPartySlot1, 0, 44);
+        public void Gen1PkmnByteFunctions_ShouldReadCurrentHP() {
+            // Arrange
             int mewPartySlot1Expected = 260;
-            int mewPartySlot1Actual = Gen1PokemonByteFunctions.ReadCurrentHPFromPkmnBytes(mewPartySlot1);
+            int magmarBox12Expected = 179;
 
-            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
+            // Act
+            int mewPartySlot1Actual = Gen1PokemonByteFunctions.ReadCurrentHPFromPkmnBytes(this.mewPartySlot1);
+            int magmarBox12Actual = Gen1PokemonByteFunctions.ReadCurrentHPFromPkmnBytes(this.magmarBox12);
+
+            // Assert
             Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
+            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
         }
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadLevel() {
-            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+        public void Gen1PkmnByteFunctions_ShouldReadLevel() {
+            // Arrange
+            int persianBox6Expected = 70;
 
-            // Box 6 starts at 0x55EA
-            byte[] persianBox6 = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x55EA + 0x16 + (33 * 2), persianBox6, 0, 33);
-            int persianExpected = 70;
-            int persianActual = Gen1PokemonByteFunctions.ReadLevelFromPkmnBytes(persianBox6);
+            // Act
+            int persianBox6Actual = Gen1PokemonByteFunctions.ReadLevelFromPkmnBytes(this.persianBox6);
 
-            Assert.Equal(persianExpected, persianActual);
+            Assert.Equal(persianBox6Expected, persianBox6Actual);
         }
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadStatus() {
+        public void Gen1PkmnByteFunctions_ShouldReadStatus() {
             Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
 
             // We're going to write these later...
@@ -52,120 +62,88 @@ namespace jirachi_core.tests {
         }
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadMoveset() {
-            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
-
-            byte[] magmarBox12 = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
-
+        public void Gen1PkmnByteFunctions_ShouldReadMoveset() {
+            // Arrange
             List<MoveModel> magmarBox12Expected = new List<MoveModel>();
             magmarBox12Expected.Add(new MoveModel(52, 25, 0));
             magmarBox12Expected.Add(new MoveModel(126, 5, 0));
             magmarBox12Expected.Add(new MoveModel(53, 15, 0));
             magmarBox12Expected.Add(new MoveModel(7, 15, 0));
-            List<MoveModel> magmarBox12Actual = Gen1PokemonByteFunctions.ReadMovesetFromPkmnBytes(magmarBox12);
-
-
-            byte[] mewPartySlot1 = new byte[44];
-            Array.Copy(Gen1Save.saveFileBytes, 0x2F2C + 0x8, mewPartySlot1, 0, 44);
 
             List<MoveModel> mewPartyExpected = new List<MoveModel>();
             mewPartyExpected.Add(new MoveModel(105, 32, 3));
             mewPartyExpected.Add(new MoveModel(5, 32, 3));
             mewPartyExpected.Add(new MoveModel(94, 16, 3));
             mewPartyExpected.Add(new MoveModel(144, 16, 3));
-            List<MoveModel> mewPartyActual = Gen1PokemonByteFunctions.ReadMovesetFromPkmnBytes(mewPartySlot1);
-
-            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
-            Assert.Equal(mewPartyExpected, mewPartyActual);
-
-
-            byte[] magmarDaycare = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x2D0B, magmarDaycare, 0, 33);
 
             List<MoveModel> magmarDaycareExpected = new List<MoveModel>();
             magmarDaycareExpected.Add(new MoveModel(52, 25, 0));
-            List<MoveModel> magmarDaycareActual = Gen1PokemonByteFunctions.ReadMovesetFromPkmnBytes(magmarDaycare);
 
+            // Act
+            List<MoveModel> mewPartyActual = Gen1PokemonByteFunctions.ReadMovesetFromPkmnBytes(this.mewPartySlot1);
+            List<MoveModel> magmarBox12Actual = Gen1PokemonByteFunctions.ReadMovesetFromPkmnBytes(this.magmarBox12);
+            List<MoveModel> magmarDaycareActual = Gen1PokemonByteFunctions.ReadMovesetFromPkmnBytes(this.magmarDaycare);
+
+            // Assert
+            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
+            Assert.Equal(mewPartyExpected, mewPartyActual);
             Assert.Equal(magmarDaycareExpected, magmarDaycareActual);
         }
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadOTID() {
-            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+        public void Gen1PkmnByteFunctions_ShouldReadOTID() {
+            // Arrange
+            int magmarBox12Expected = 20893;
+            int machampBox12Expected = 17178;
 
-            byte[] magmarBox12 = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
-            int magmarBoxExpected = 20893;
-            int magmarBoxActual = Gen1PokemonByteFunctions.ReadOTIDFromPkmnBytes(magmarBox12);
-            Assert.Equal(magmarBoxExpected, magmarBoxActual);
+            // Act
+            int magmarBox12Actual = Gen1PokemonByteFunctions.ReadOTIDFromPkmnBytes(this.magmarBox12);
+            int machampBox12Actual = Gen1PokemonByteFunctions.ReadOTIDFromPkmnBytes(this.machampBox12);
 
-            byte[] machampBox12 = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16 + 33, machampBox12, 0, 33);
-            int machampBoxExpected = 17178;
-            int machampBoxActual = Gen1PokemonByteFunctions.ReadOTIDFromPkmnBytes(machampBox12);
-            Assert.Equal(machampBoxExpected, machampBoxActual);
+            // Assert
+            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
+            Assert.Equal(machampBox12Expected, machampBox12Actual);
         }
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadXP() {
-            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+        public void Gen1PkmnByteFunctions_ShouldReadXP() {
+            // Arrange
+            int persianBox6Expected = 343000;
+            int magmarBox12Expected = 274925;
 
-            byte[] magmarBox12 = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x75EA + 0x16, magmarBox12, 0, 33);
-            int magmarBoxExpected = 274925;
-            int magmarBoxActual = Gen1PokemonByteFunctions.ReadXPFromPkmnBytes(magmarBox12);
-            Assert.Equal(magmarBoxExpected, magmarBoxActual);
+            // Act
+            int persianBox6Actual = Gen1PokemonByteFunctions.ReadXPFromPkmnBytes(this.persianBox6);
+            int magmarBox12Actual = Gen1PokemonByteFunctions.ReadXPFromPkmnBytes(this.magmarBox12);
 
-            byte[] persianBox6 = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x55EA + 0x16 + (33 * 2), persianBox6, 0, 33);
-            int persianExpected = 343000;
-            int persianActual = Gen1PokemonByteFunctions.ReadXPFromPkmnBytes(persianBox6);
-            Assert.Equal(persianExpected, persianActual);
+            // Assert
+            Assert.Equal(persianBox6Expected, persianBox6Actual);
+            Assert.Equal(magmarBox12Expected, magmarBox12Actual);
         }
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadStats() {
-            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+        public void Gen1PkmnBytefunctions_ShouldReadStats() {
+            // Arrange
+            List<StatModel> mewPartySlot1Expected = new List<StatModel>();
+            mewPartySlot1Expected.Add(new StatModel(StatType.HP, 260, 9, 25648));
+            mewPartySlot1Expected.Add(new StatModel(StatType.Attack, 191, 13, 25648));
+            mewPartySlot1Expected.Add(new StatModel(StatType.Defense, 178, 4, 25648));
+            mewPartySlot1Expected.Add(new StatModel(StatType.Speed, 192, 14, 25648));
+            mewPartySlot1Expected.Add(new StatModel(StatType.Special, 188, 11, 25648));
 
-            byte[] mewPartySlot1 = new byte[44];
-            Array.Copy(Gen1Save.saveFileBytes, 0x2F2C + 0x8, mewPartySlot1, 0, 44);
+            List<StatModel> magmarDaycareExpected = new List<StatModel>();
+            magmarDaycareExpected.Add(new StatModel(StatType.HP, 11, 0));
+            magmarDaycareExpected.Add(new StatModel(StatType.Attack, 1, 0));
+            magmarDaycareExpected.Add(new StatModel(StatType.Defense, 0, 0));
+            magmarDaycareExpected.Add(new StatModel(StatType.Speed, 15, 0));
+            magmarDaycareExpected.Add(new StatModel(StatType.Special, 7, 0));
 
-            StatModel mewHPExpected = new StatModel(StatType.HP, 260, 9, 25648);
-            StatModel mewAtkExpected = new StatModel(StatType.Attack, 191, 13, 25648);
-            StatModel mewDefExpected = new StatModel(StatType.Defense, 178, 4, 25648);
-            StatModel mewSpdExpected = new StatModel(StatType.Speed, 192, 14, 25648);
-            StatModel mewSpcExpected = new StatModel(StatType.Special, 188, 11, 25648);
+            // Act
+            List<StatModel> mewPartySlot1Actual = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(this.mewPartySlot1);
+            List<StatModel> magmarDaycareActual = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(this.magmarDaycare);
 
-            List<StatModel> mewStatsExpected = new List<StatModel>();
-            mewStatsExpected.Add(mewHPExpected);
-            mewStatsExpected.Add(mewAtkExpected);
-            mewStatsExpected.Add(mewDefExpected);
-            mewStatsExpected.Add(mewSpdExpected);
-            mewStatsExpected.Add(mewSpcExpected);
-            List<StatModel> mewStatsActual = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(mewPartySlot1);
-
-            Assert.True(mewStatsExpected.SequenceEqual(mewStatsActual));
-
-
-            byte[] magmarDaycare = new byte[33];
-            Array.Copy(Gen1Save.saveFileBytes, 0x2D0B, magmarDaycare, 0, 33);
-
-            StatModel magmarHPExpected = new StatModel(StatType.HP, 11, 0);
-            StatModel magmarAtkExpected = new StatModel(StatType.Attack, 1, 0);
-            StatModel magmarDefExpected = new StatModel(StatType.Defense, 0, 0);
-            StatModel magmarSpdExpected = new StatModel(StatType.Speed, 15, 0);
-            StatModel magmarSpcExpected = new StatModel(StatType.Special, 7, 0);
-
-            List<StatModel> magmarStatsExpected = new List<StatModel>();
-            magmarStatsExpected.Add(magmarHPExpected);
-            magmarStatsExpected.Add(magmarAtkExpected);
-            magmarStatsExpected.Add(magmarDefExpected);
-            magmarStatsExpected.Add(magmarSpdExpected);
-            magmarStatsExpected.Add(magmarSpcExpected);
-            List<StatModel> magmarStatsActual = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(magmarDaycare);
-
-            Assert.True(magmarStatsExpected.SequenceEqual(magmarStatsActual));
+            // Assert
+            Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
+            Assert.Equal(magmarDaycareExpected, magmarDaycareActual);
         }
     }
 }
