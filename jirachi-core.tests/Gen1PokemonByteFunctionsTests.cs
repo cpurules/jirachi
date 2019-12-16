@@ -123,5 +123,28 @@ namespace jirachi_core.tests {
             int persianActual = Gen1PokemonByteFunctions.ReadXPFromPkmnBytes(persianBox6);
             Assert.Equal(persianExpected, persianActual);
         }
+
+        [Fact]
+        public void Gen1SaveFileHandler_ShouldReadStats() {
+            Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+
+            byte[] mewPartySlot1 = new byte[44];
+            Array.Copy(Gen1Save.saveFileBytes, 0x2F2C + 0x8, mewPartySlot1, 0, 44);
+
+            StatModel mewHPExpected = new StatModel(StatType.HP, 260, 9, 25648);
+            StatModel mewAtkExpected = new StatModel(StatType.Attack, 191, 13, 25648);
+            StatModel mewDefExpected = new StatModel(StatType.Defense, 178, 4, 25648);
+            StatModel mewSpdExpected = new StatModel(StatType.Speed, 192, 14, 25648);
+            StatModel mewSpcExpected = new StatModel(StatType.Special, 188, 11, 25648);
+
+            List<StatModel> mewStatsActual = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(mewPartySlot1);
+
+            // Gen 1 stats byte order is HP, Atk, Def, Spd, Spc
+            Assert.Equal(mewHPExpected, mewStatsActual[0]);
+            Assert.Equal(mewAtkExpected, mewStatsActual[1]);
+            Assert.Equal(mewDefExpected, mewStatsActual[2]);
+            Assert.Equal(mewSpdExpected, mewStatsActual[3]);
+            Assert.Equal(mewSpcExpected, mewStatsActual[4]);
+        }
     }
 }
