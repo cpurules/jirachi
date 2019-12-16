@@ -145,5 +145,16 @@ namespace jirachi_core.tests {
             Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
             Assert.Equal(magmarDaycareExpected, magmarDaycareActual);
         }
+
+        [Theory]
+        [InlineData(1, 112)]
+        [InlineData(21, 151)]
+        [InlineData(43, 106)]
+        [InlineData(153, 1)]
+        public void Gen1PkmnByteFunctions_ShouldConvertIndexToNatlDex(int index, int expected) {
+            int actual = Gen1PokemonByteFunctions.ConvertIndexToNationalDex(index);
+
+            Assert.Equal(expected, actual);
+        }
     }
 }
