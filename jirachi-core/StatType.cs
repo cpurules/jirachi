@@ -8,6 +8,7 @@ namespace jirachi_core {
         Attack,
         Defense,
         Speed,
+        Special,
         SpecialAttack,
         SpecialDefense
     }
