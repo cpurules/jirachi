@@ -80,12 +80,53 @@ namespace jirachi_core {
         }
 
         public static List<StatModel> ReadStatsFromPkmnBytes(byte[] bytes) {
-            // only valid for party data
-            if(bytes.Length != 44) {
-                throw new ArgumentException("Stats are only available in party Pokemon bytes");
+            int hpEV = ByteFunctions.ReadBytesToInteger(bytes, 0x11, 2);
+            int atkEV = ByteFunctions.ReadBytesToInteger(bytes, 0x13, 2);
+            int defEV = ByteFunctions.ReadBytesToInteger(bytes, 0x15, 2);
+            int spdEV = ByteFunctions.ReadBytesToInteger(bytes, 0x17, 2);
+            int spcEV = ByteFunctions.ReadBytesToInteger(bytes, 0x19, 2);
+
+            int atkIV = bytes[0x1B] >> 4;
+            int defIV = bytes[0x1B] & 0b1111;
+            int spdIV = bytes[0x1C] >> 4;
+            int spcIV = bytes[0x1C] & 0b1111;
+            int hpIV = ((atkIV % 2) << 3) + ((defIV % 2) << 2) + ((spdIV % 2) << 1) + (spcIV % 2);
+
+            StatModel hp;
+            StatModel atk;
+            StatModel def;
+            StatModel spd;
+            StatModel spc;
+
+            if(bytes.Length == 33) {
+                hp = new StatModel(StatType.HP, hpIV, hpEV);
+                atk = new StatModel(StatType.Attack, atkIV, atkEV);
+                def = new StatModel(StatType.Defense, defIV, defEV);
+                spd = new StatModel(StatType.Speed, spdIV, spdEV);
+                spc = new StatModel(StatType.Special, spcIV, spcEV);
+            }
+            else {
+                int hpVal = ByteFunctions.ReadBytesToInteger(bytes, 0x22, 2);
+                int atkVal = ByteFunctions.ReadBytesToInteger(bytes, 0x24, 2);
+                int defVal = ByteFunctions.ReadBytesToInteger(bytes, 0x26, 2);
+                int spdVal = ByteFunctions.ReadBytesToInteger(bytes, 0x28, 2);
+                int spcVal = ByteFunctions.ReadBytesToInteger(bytes, 0x2A, 2);
+
+                hp = new StatModel(StatType.HP, hpVal, hpIV, hpEV);
+                atk = new StatModel(StatType.Attack, atkVal, atkIV, atkEV);
+                def = new StatModel(StatType.Defense, defVal, defIV, defEV);
+                spd = new StatModel(StatType.Speed, spdVal, spdIV, spdEV);
+                spc = new StatModel(StatType.Special, spcVal, spcIV, spcEV);
             }
 
-            return null;
+            List<StatModel> stats = new List<StatModel>();
+            stats.Add(hp);
+            stats.Add(atk);
+            stats.Add(def);
+            stats.Add(spd);
+            stats.Add(spc);
+
+            return stats;
         }
 
         public static int ConvertIndexToNationalDex(int index) {
