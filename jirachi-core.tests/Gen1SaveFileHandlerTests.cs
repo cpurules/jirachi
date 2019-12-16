@@ -26,7 +26,7 @@ namespace jirachi_core.tests {
         public void Gen1SaveFileHandler_ShouldThrowNotSave() {
             string pathToNonSaveFile = "C:\\key.txt";
 
-            Assert.Throws<FormatException>(() => new Gen1SaveFileHandler(pathToNonSaveFile));
+            Assert.Throws<FileNotFoundException>(() => new Gen1SaveFileHandler(pathToNonSaveFile));
         }
 
         [Fact]
