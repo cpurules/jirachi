@@ -156,5 +156,23 @@ namespace jirachi_core.tests {
 
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void Gen1PkmnByteFunctions_ShouldReadNatlDex() {
+            // Arrange
+            int mewPartySlot1Expected = 151;
+            int machampBox12Expected = 68;
+            int magmarDaycareExpected = 126;
+
+            // Act
+            int mewPartySlot1Actual = Gen1PokemonByteFunctions.ReadNationalDexNumberFromPkmnBytes(this.mewPartySlot1);
+            int machampBox12Actual = Gen1PokemonByteFunctions.ReadNationalDexNumberFromPkmnBytes(this.machampBox12);
+            int magmarDaycareActual = Gen1PokemonByteFunctions.ReadNationalDexNumberFromPkmnBytes(this.magmarDaycare);
+
+            // Assert
+            Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
+            Assert.Equal(machampBox12Expected, machampBox12Actual);
+            Assert.Equal(magmarDaycareExpected, magmarDaycareActual);
+        }
     }
 }
