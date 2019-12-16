@@ -219,6 +219,7 @@ namespace jirachi_core {
             List<MoveModel> moveset;
             StatusType status;
             int OTID;
+            List<StatModel> stats;
 
             if(location == PokemonLocation.Daycare) {
                 // Daycare data needs to be exactly 55 bytes long
@@ -286,9 +287,12 @@ namespace jirachi_core {
             // xp
             xp = Gen1PokemonByteFunctions.ReadXPFromPkmnBytes(pokemonDataBytes);
 
+            // stats
+            stats = Gen1PokemonByteFunctions.ReadStatsFromPkmnBytes(pokemonDataBytes);
 
-            // return thisPokemon;
-            return null;
+            PokemonModel pokemon = new PokemonModel(nationalDexNumber, nickname, level, xp, currentHP, moveset, status, OTID, location, stats);
+
+            return pokemon;
         }
 
         
