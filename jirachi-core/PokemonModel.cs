@@ -97,5 +97,9 @@ namespace jirachi_core {
         /// Represents where this Pokemon lives
         /// </summary>
         public PokemonLocation Location { get; set; }
+        /// <summary>
+        /// Represents this Pokemon's stats
+        /// </summary>
+        public List<StatModel> Stats { get; set; }
     }
 }
