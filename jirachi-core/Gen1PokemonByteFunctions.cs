@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace jirachi_core {
     public static class Gen1PokemonByteFunctions {
@@ -138,9 +142,19 @@ namespace jirachi_core {
         public static int ConvertIndexToNationalDex(int index) {
             // source: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
 
-            Dictionary<int, int> NationalDexLookup = new Dictionary<int, int>();
+            List<NationalDexLookupEntry> dexLookupEntries = JsonConvert.DeserializeObject<List<NationalDexLookupEntry>>(File.ReadAllText(@"I:\Carbon Black\cunfricht\CSharp\jirachi\Gen1IndexMapping.json"));
+            IEnumerable<NationalDexLookupEntry> matchingEntries = dexLookupEntries.Where(dexEntry => dexEntry.Index == index);
+            
+            if(matchingEntries.Count() != 1) {
+                throw new ArgumentOutOfRangeException("The provided index did not return one dex lookup entry");
+            }
 
-            return 0; // stump
+            return matchingEntries.First().NatlDex;
+        }
+
+        private class NationalDexLookupEntry {
+            public int Index { get; set; }
+            public int NatlDex { get; set; }
         }
     }
 }
