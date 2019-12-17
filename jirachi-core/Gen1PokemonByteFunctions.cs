@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -142,7 +143,16 @@ namespace jirachi_core {
         public static int ConvertIndexToNationalDex(int index) {
             // source: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_index_number_(Generation_I)
 
-            List<NationalDexLookupEntry> dexLookupEntries = JsonConvert.DeserializeObject<List<NationalDexLookupEntry>>(File.ReadAllText(@"I:\Carbon Black\cunfricht\CSharp\jirachi\Gen1IndexMapping.json"));
+            // Lifted from Stack Overflow
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("Gen1IndexMapping.json"));
+            string indexJson;
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream)) {
+                indexJson = reader.ReadToEnd();
+            }
+
+            List<NationalDexLookupEntry> dexLookupEntries = JsonConvert.DeserializeObject<List<NationalDexLookupEntry>>(indexJson);
             IEnumerable<NationalDexLookupEntry> matchingEntries = dexLookupEntries.Where(dexEntry => dexEntry.Index == index);
             
             if(matchingEntries.Count() != 1) {
