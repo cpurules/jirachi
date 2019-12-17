@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace jirachi_core {
@@ -106,14 +107,15 @@ namespace jirachi_core {
         public List<StatModel> Stats { get; set; }
 
         public override bool Equals(object obj) {
-            return obj is PokemonModel model &&
+            return !System.Object.ReferenceEquals(obj, null) &&
+                   obj is PokemonModel model &&
                    Generation == model.Generation &&
                    NationalDexNumber == model.NationalDexNumber &&
                    Nickname == model.Nickname &&
                    Level == model.Level &&
                    XP == model.XP &&
                    CurrentHP == model.CurrentHP &&
-                   EqualityComparer<List<MoveModel>>.Default.Equals(Moveset, model.Moveset) &&
+                   Moveset.SequenceEqual(model.Moveset) &&
                    EqualityComparer<ItemModel>.Default.Equals(HeldItem, model.HeldItem) &&
                    Status == model.Status &&
                    EqualityComparer<PokerusModel>.Default.Equals(Pokerus, model.Pokerus) &&
@@ -122,7 +124,7 @@ namespace jirachi_core {
                    Language == model.Language &&
                    Ability == model.Ability &&
                    Location == model.Location &&
-                   EqualityComparer<List<StatModel>>.Default.Equals(Stats, model.Stats);
+                   Stats.SequenceEqual(model.Stats);
         }
 
         public override int GetHashCode() {
