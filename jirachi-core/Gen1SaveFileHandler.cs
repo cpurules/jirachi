@@ -242,8 +242,8 @@ namespace jirachi_core {
                 int dataStart;
 
                 if(location == PokemonLocation.Box) {
-                    // Box data needs to be exactly 1,142 bytes long
-                    if(bytes.Length != 1142) {
+                    // Box data needs to be exactly 1,122 bytes long
+                    if(bytes.Length != 1122) {
                         throw new ArgumentException("You need to provide the full box data");
                     }
                     dataLength = 33;
