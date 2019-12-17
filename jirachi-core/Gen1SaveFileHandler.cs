@@ -223,6 +223,8 @@ namespace jirachi_core {
 
             if(location == PokemonLocation.Daycare) {
                 // Daycare data needs to be exactly 55 bytes long
+                // This is the 55 bytes starting at 0x2CF5:
+                // 0xB - Name; 0xB - OT Name; rest - short Pokemon
                 if(bytes.Length != 55) {
                     throw new ArgumentException("Daycare pokemon should be 55 bytes");
                 }
