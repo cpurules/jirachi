@@ -184,12 +184,28 @@ namespace jirachi_core.tests {
                     new StatModel(StatType.Special, 188, 11, 25648)
                 });
 
+            PokemonModel machampBox12Expected = new PokemonModel(68, "MACHAMP", 60, 219126, 205,
+                new List<MoveModel> {
+                    new MoveModel(2, 25, 0),
+                    new MoveModel(66, 25, 0),
+                    new MoveModel(69, 20, 0),
+                    new MoveModel(70, 15, 0)
+                }, StatusType.None, 17178, PokemonLocation.Box,
+                new List<StatModel> {
+                    new StatModel(StatType.HP, 12, 8101),
+                    new StatModel(StatType.Attack, 11, 12612),
+                    new StatModel(StatType.Defense, 15, 10280),
+                    new StatModel(StatType.Speed, 12, 16770),
+                    new StatModel(StatType.Special, 4, 13794)
+                });
+
             // Act
             PokemonModel mewPartySlot1Actual = Gen1SaveFileHandler.ReadPokemonFromBytes(partyBytes, PokemonLocation.Party, 0);
-            PokemonModel machampBox12Actual = Gen1SaveFileHandler.ReadPokemonFromBytes(box12Bytes, PokemonLocation.Box, 2);
+            PokemonModel machampBox12Actual = Gen1SaveFileHandler.ReadPokemonFromBytes(box12Bytes, PokemonLocation.Box, 1);
 
             // Assert
             Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
+            Assert.Equal(machampBox12Expected, machampBox12Actual);
         }
     }
 }
