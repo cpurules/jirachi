@@ -158,7 +158,7 @@ namespace jirachi_core.tests {
         }
 
         [Fact]
-        public void Gen1SaveFileHandler_ShouldReadPokemonFromFullBytes() {
+         public void Gen1SaveFileHandler_ShouldReadPokemonFromFullBytes() {
             Gen1SaveFileHandler Gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
             byte[] saveFileBytes = Gen1Save.saveFileBytes;
 
@@ -169,13 +169,27 @@ namespace jirachi_core.tests {
             Array.Copy(saveFileBytes, 0x75EA, box12Bytes, 0, 0x462);
 
             // Arrange
+            PokemonModel mewPartySlot1Expected = new PokemonModel(151, "MEW", 70, 345177, 260,
+                new List<MoveModel> {
+                    new MoveModel(105, 32, 3),
+                    new MoveModel(5, 32, 3),
+                    new MoveModel(94, 16, 3),
+                    new MoveModel(144, 16, 3)
+                }, StatusType.None, 20893, PokemonLocation.Party,
+                new List<StatModel> {
+                    new StatModel(StatType.HP, 260, 9, 25648),
+                    new StatModel(StatType.Attack, 191, 13, 25648),
+                    new StatModel(StatType.Defense, 178, 4, 25648),
+                    new StatModel(StatType.Speed, 192, 14, 25648),
+                    new StatModel(StatType.Special, 188, 11, 25648)
+                });
 
             // Act
             PokemonModel mewPartySlot1Actual = Gen1SaveFileHandler.ReadPokemonFromBytes(partyBytes, PokemonLocation.Party, 0);
             PokemonModel machampBox12Actual = Gen1SaveFileHandler.ReadPokemonFromBytes(box12Bytes, PokemonLocation.Box, 2);
 
             // Assert
-
+            Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
         }
     }
 }
