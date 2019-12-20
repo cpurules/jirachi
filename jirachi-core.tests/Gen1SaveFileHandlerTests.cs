@@ -269,5 +269,25 @@ namespace jirachi_core.tests {
             // Assert
             Assert.Equal(otID, actual);
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(3)]
+        [InlineData(99)]
+        [InlineData(254)]
+        public void Gen1SaveFileHandler_ShouldWriteHoursPlayed(int hours) {
+            Gen1SaveFileHandler gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel gen1Game = gen1Save.ReadSaveFile();
+
+            // Act
+            gen1Game.HoursPlayed = hours;
+            gen1Save.WriteSaveFileBytes(gen1Game);
+
+            // Since we have already tested ReadCoins, we can use it in this test
+            int actual = gen1Save.ReadHoursPlayed();
+
+            // Assert
+            Assert.Equal(hours, actual);
+        }
     }
 }
