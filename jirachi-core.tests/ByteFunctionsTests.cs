@@ -65,6 +65,60 @@ namespace jirachi_core.tests {
         }
 
         [Theory]
+        [InlineData(0, new byte[] { 0x00 })]
+        [InlineData(1, new byte[] { 0x01 })]
+        [InlineData(256, new byte[] { 0x01, 0x00 })]
+        [InlineData(257, new byte[] { 0x01, 0x01 })]
+        [InlineData(608214, new byte[] { 0x09, 0x47, 0xD6 })]
+        public void ReadIntegerToBytes_SimpleValueShouldRead(int value, byte[] expected) {
+            byte[] actual = ByteFunctions.ReadIntegerToBytes(value);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(0, 1, new byte[] { 0x00 })]
+        [InlineData(1, 2, new byte[] { 0x00, 0x01 })]
+        [InlineData(2, 4, new byte[] { 0x00, 0x00, 0x00, 0x02 })]
+        [InlineData(783, 3, new byte[] { 0x00, 0x03, 0x0F })]
+        public void ReadIntegerToBytes_ForcedByteCountShouldPad(int value, int forcedByteCount, byte[] expected) {
+            byte[] actual = ByteFunctions.ReadIntegerToBytes(value, forcedByteCount);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(0, new byte[] { 0x00 })]
+        [InlineData(1, new byte[] { 0x01 })]
+        [InlineData(985, new byte[] { 0xD9, 0x03 })]
+        [InlineData(608214, new byte[] { 0xD6, 0x47, 0x09 })]
+        public void ReadIntegerToBytes_LittleEndianSimpleShouldRead(int value, byte[] expected) {
+            byte[] actual = ByteFunctions.ReadIntegerToBytes(value, bigEndian: false);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(0, 1, new byte[] { 0x00 })]
+        [InlineData(1, 2, new byte[] { 0x01, 0x00 })]
+        [InlineData(783, 4, new byte[] { 0x0F, 0x03, 0x00, 0x00 })]
+        [InlineData(608214, 4, new byte[] { 0xD6, 0x47, 0x09, 0x00 })]
+        public void ReadIntegerToBytes_LittleEndianForcedShouldPad(int value, int forcedByteCount, byte[] expected) {
+            byte[] actual = ByteFunctions.ReadIntegerToBytes(value, forcedByteCount, false);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(-123)] // ArgumentOutOfRangeException:  Only positive values are allowed
+        [InlineData(0, 5)] // ArgumentOutOfRangeException:  [0, 4] are valid for forcedByteCount
+        [InlineData(923, -1)] // ArgumentOutOfRangeException:  [0, 4] are valid for forcedByteCount
+        [InlineData(256, 1)] // ArgumentOutOfRangeException:  Can't squish 2 bytes into 1
+        public void ReadIntegerToBytes_ShouldThrowArgumentExceptions(int value, int forcedByteCount = 0) {
+            Assert.Throws<ArgumentOutOfRangeException>(() => ByteFunctions.ReadIntegerToBytes(value, forcedByteCount));
+        }
+
+        [Theory]
         [InlineData(new byte[] { 0x01, 0x02, 0x03, 0x04 }, 0x02, 3)]
         [InlineData(new byte[] { 0x00 }, 0x00, 0)]
         public void ReadBinaryEncodedDecimal_SimpleValueShouldRead(byte[] bytes, int offset, int expected) {
