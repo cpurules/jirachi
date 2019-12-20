@@ -40,7 +40,7 @@ namespace jirachi_core {
             return saveGame;
         }
 
-        public void WriteSaveFile(GameModel saveGame) {
+        public void WriteSaveFileBytes(GameModel saveGame) {
             this.WriteMoney(saveGame.Money);
             this.WriteCoins(saveGame.Coins);
         }
