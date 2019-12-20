@@ -126,5 +126,44 @@ namespace jirachi_core {
 
             return byteVal;
         }
+
+        public static byte[] ReadIntegerToBED(int value, int forcedByteCount = 0) {
+            if (value < 0) {
+                throw new ArgumentOutOfRangeException("Only positive values can be converted to bytes");
+            }
+
+            byte[] returnBytes;
+            string integerAsString = value.ToString();
+            if(integerAsString.Length % 2 == 1) {
+                // We have an odd number of digits.  We will need to prepend a zero
+                integerAsString = "0" + integerAsString;
+            }
+
+            int sigByteCount = integerAsString.Length / 2;
+            int returnByteCount;
+
+            if (forcedByteCount < 0) {
+                throw new ArgumentOutOfRangeException("Valid values for forcedByteCount are non-negative");
+            }
+            else if (forcedByteCount == 0) {
+                returnByteCount = sigByteCount;
+            }
+            else if (forcedByteCount < sigByteCount) {
+                throw new ArgumentOutOfRangeException(String.Format("You cannot squish {0} bytes into {1} bytes", sigByteCount, forcedByteCount));
+            }
+            else {
+                returnByteCount = forcedByteCount;
+                int zerosToAdd = (returnByteCount * 2) - integerAsString.Length;
+                integerAsString = new string('0', zerosToAdd) + integerAsString;
+            }
+            returnBytes = new byte[returnByteCount];
+
+            for(int i = 0; i < returnByteCount; i++) {
+                string thisByteHex = integerAsString.Substring(i*2, 2);
+                returnBytes[i] = Convert.ToByte(thisByteHex, 16);
+            }
+
+            return returnBytes;
+        }
     }
 }

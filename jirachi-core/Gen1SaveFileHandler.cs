@@ -40,12 +40,22 @@ namespace jirachi_core {
             return saveGame;
         }
 
+        public void WriteSaveFile(GameModel saveGame) {
+            this.WriteMoney(saveGame.Money);
+        }
+
         private int ReadMoney() {
             // In Generation 1, money is stored in 3 bytes, beginning at 0x25F3 and stored as binary-encoded decimal
             // (source:  https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Main_Data)
             int money = ByteFunctions.ReadBinaryEncodedDecimal(this.saveFileBytes, 0x25F3, 3, true);
 
             return money;
+        }
+
+        private void WriteMoney(int money) {
+            byte[] moneyBytes = null;
+
+            return;
         }
 
         private int ReadCoins() {
