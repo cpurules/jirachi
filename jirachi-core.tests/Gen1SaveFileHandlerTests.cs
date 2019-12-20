@@ -207,5 +207,67 @@ namespace jirachi_core.tests {
             Assert.Equal(mewPartySlot1Expected, mewPartySlot1Actual);
             Assert.Equal(machampBox12Expected, machampBox12Actual);
         }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(409)]
+        [InlineData(9999)]
+        [InlineData(123456)]
+        public void Gen1SaveFileHandler_ShouldWriteMoney(int money) {
+            Gen1SaveFileHandler gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel gen1Game = gen1Save.ReadSaveFile();
+
+            // Act
+            gen1Game.Money = money;
+            gen1Save.WriteSaveFileBytes(gen1Game);
+
+            // Since we have already tested ReadMoney, we can use it in this test
+            int actual = gen1Save.ReadMoney();
+
+            // Assert
+            Assert.Equal(money, actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(109)]
+        [InlineData(9328)]
+        public void Gen1SaveFileHandler_ShouldWriteCoins(int coins) {
+            Gen1SaveFileHandler gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel gen1Game = gen1Save.ReadSaveFile();
+
+            // Act
+            gen1Game.Coins = coins;
+            gen1Save.WriteSaveFileBytes(gen1Game);
+
+            // Since we have already tested ReadCoins, we can use it in this test
+            int actual = gen1Save.ReadCoins();
+
+            // Assert
+            Assert.Equal(coins, actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(294)]
+        [InlineData(8103)]
+        [InlineData(65535)]
+        public void Gen1SaveFileHandler_ShouldWriteOTID(int otID) {
+            Gen1SaveFileHandler gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel gen1Game = gen1Save.ReadSaveFile();
+
+            // Act
+            gen1Game.TrainerID = otID;
+            gen1Save.WriteSaveFileBytes(gen1Game);
+
+            // Since we have already tested ReadCoins, we can use it in this test
+            int actual = gen1Save.ReadTrainerID();
+
+            // Assert
+            Assert.Equal(otID, actual);
+        }
     }
 }
