@@ -53,9 +53,9 @@ namespace jirachi_core {
         }
 
         private void WriteMoney(int money) {
-            byte[] moneyBytes = null;
+            byte[] moneyBytes = ByteFunctions.ReadIntegerToBED(money, 3);
 
-            return;
+            Array.Copy(moneyBytes, 0, this.saveFileBytes, 0x25F3, 3);
         }
 
         private int ReadCoins() {
