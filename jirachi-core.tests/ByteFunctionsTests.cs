@@ -167,5 +167,36 @@ namespace jirachi_core.tests {
         public void ReadBinaryEncodedDecimal_LittleEndianLargeValueShouldOverflow(byte[] bytes, int offset, int length) {
             Assert.Throws<OverflowException>(() => ByteFunctions.ReadBinaryEncodedDecimal(bytes, offset, length));
         }
+
+        [Theory]
+        [InlineData(0, new byte[] { 0x00 })]
+        [InlineData(1, new byte[] { 0x01 })]
+        [InlineData(12, new byte[] { 0x12 })]
+        [InlineData(729, new byte[] { 0x07, 0x29 })]
+        [InlineData(9204821, new byte[] { 0x09, 0x20, 0x48, 0x21 })]
+        public void ReadIntegerToBED_SimpleValueShouldRead(int value, byte[] expected) {
+            byte[] actual = ByteFunctions.ReadIntegerToBED(value, 0);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(0, 1, new byte[] { 0x00 })]
+        [InlineData(0, 2, new byte[] { 0x00, 0x00 })]
+        [InlineData(13, 4, new byte[] { 0x00, 0x00, 0x00, 0x13 })]
+        [InlineData(104, 3, new byte[] { 0x00, 0x01, 0x04 })]
+        public void ReadIntegerToBED_ForcedByteCountShouldPad(int value, int forcedByteCount, byte[] expected) {
+            byte[] actual = ByteFunctions.ReadIntegerToBED(value, forcedByteCount);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Theory]
+        [InlineData(-1)] // Negative value
+        [InlineData(44, -2)] // Negative forcedByteCount
+        [InlineData(456, 1)] // Squish
+        public void ReadIntegerToBED_ShouldThrowArgumentException(int value, int forcedByteCount = 0) {
+            Assert.Throws<ArgumentOutOfRangeException>(() => ByteFunctions.ReadIntegerToBED(value, forcedByteCount));
+        }
     }
 }
