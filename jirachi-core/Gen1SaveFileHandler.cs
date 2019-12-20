@@ -42,6 +42,7 @@ namespace jirachi_core {
 
         public void WriteSaveFile(GameModel saveGame) {
             this.WriteMoney(saveGame.Money);
+            this.WriteCoins(saveGame.Coins);
         }
 
         private int ReadMoney() {
@@ -64,6 +65,12 @@ namespace jirachi_core {
             int coins = ByteFunctions.ReadBinaryEncodedDecimal(this.saveFileBytes, 0x2850, 2, true);
 
             return coins;
+        }
+
+        private void WriteCoins(int coins) {
+            byte[] coinBytes = ByteFunctions.ReadIntegerToBED(coins, 2);
+
+            Array.Copy(coinBytes, 0, this.saveFileBytes, 0x2850, 2);
         }
 
         private int ReadTrainerID() {
