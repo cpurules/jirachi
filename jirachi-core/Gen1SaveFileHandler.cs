@@ -45,7 +45,7 @@ namespace jirachi_core {
             this.WriteCoins(saveGame.Coins);
         }
 
-        private int ReadMoney() {
+        public int ReadMoney() {
             // In Generation 1, money is stored in 3 bytes, beginning at 0x25F3 and stored as binary-encoded decimal
             // (source:  https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Main_Data)
             int money = ByteFunctions.ReadBinaryEncodedDecimal(this.saveFileBytes, 0x25F3, 3, true);
@@ -59,7 +59,7 @@ namespace jirachi_core {
             Array.Copy(moneyBytes, 0, this.saveFileBytes, 0x25F3, 3);
         }
 
-        private int ReadCoins() {
+        public int ReadCoins() {
             // In Generation 1, slot coins are stored in 2 bytes, beginning at 0x2850 and stored as binary-encoded decimal
             // (source: https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Main_Data)
             int coins = ByteFunctions.ReadBinaryEncodedDecimal(this.saveFileBytes, 0x2850, 2, true);
@@ -73,7 +73,7 @@ namespace jirachi_core {
             Array.Copy(coinBytes, 0, this.saveFileBytes, 0x2850, 2);
         }
 
-        private int ReadTrainerID() {
+        public int ReadTrainerID() {
             // In Generation 1, player ID is stored in 2 bytes, beginning at 0x2605
             // (source: https://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_I#Main_Data)
             int trainerId = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2605, 2);
@@ -81,35 +81,35 @@ namespace jirachi_core {
             return trainerId;
         }
 
-        private int ReadHoursPlayed() {
+        public int ReadHoursPlayed() {
             // In Generation 1, hours played is stored in 1 byte at 0x2CED
             int hoursPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CED, 1);
 
             return hoursPlayed;
         }
 
-        private int ReadMinsPlayed() {
+        public int ReadMinsPlayed() {
             // In Generation 1, minutes played is stored in 1 byte at 0x2CEF
             int minsPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CEF, 1);
 
             return minsPlayed;
         }
 
-        private int ReadSecsPlayed() {
+        public int ReadSecsPlayed() {
             // In Generation 1, seconds played is stored in 1 byte at 0x2CF0
             int secsPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CF0, 1);
 
             return secsPlayed;
         }
 
-        private int ReadFramesPlayed() {
+        public int ReadFramesPlayed() {
             // In Generation 1, frames played is stored in 1 byte at 0x2CF1
             int framesPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CF1, 1);
 
             return framesPlayed;
         }
 
-        private string ReadRivalName() {
+        public string ReadRivalName() {
             // In Generation 1, rival name is stored in 11 bytes starting at 0x25F6
             byte[] rivalNameBytes = new byte[11];
             Array.Copy(this.saveFileBytes, 0x25F6, rivalNameBytes, 0, 11);
@@ -118,7 +118,7 @@ namespace jirachi_core {
             return rivalName;
         }
 
-        private string ReadTrainerName() {
+        public string ReadTrainerName() {
             // In Generation 1, trainer name is stored in 11 bytes starting at 0x2598
             byte[] trainerNameBytes = new byte[11];
             Array.Copy(this.saveFileBytes, 0x2598, trainerNameBytes, 0, 11);
@@ -127,7 +127,7 @@ namespace jirachi_core {
             return trainerName;
         }
 
-        private List<ItemModel> ReadInventory() {
+        public List<ItemModel> ReadInventory() {
             // In Generation 1, the bag inventory is stored in 0x2A bytes, starting at 0x25C9
             // The list format consists of a count byte at 0x00; 2 bytes for each item, which
             // represent item index and quantity; and a terminator byte 0xFF
@@ -143,7 +143,7 @@ namespace jirachi_core {
             return inventory;
         }
 
-        private List<ItemModel> ReadPCInventory() {
+        public List<ItemModel> ReadPCInventory() {
             // In Generation 1, the PC inventory is stored in 0x68 bytes, starting at 0x27E6
             // The list format consists of a count byte at 0x00; 2 bytes for each item, which
             // represent item index and quantity; and a terminator byte 0xFF
