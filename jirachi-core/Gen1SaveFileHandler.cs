@@ -43,6 +43,8 @@ namespace jirachi_core {
         public void WriteSaveFileBytes(GameModel saveGame) {
             this.WriteMoney(saveGame.Money);
             this.WriteCoins(saveGame.Coins);
+            this.WriteTrainerID(saveGame.TrainerID);
+            this.WriteHoursPlayed(saveGame.HoursPlayed);
         }
 
         public int ReadMoney() {
@@ -81,11 +83,23 @@ namespace jirachi_core {
             return trainerId;
         }
 
+        private void WriteTrainerID(int otId) {
+            byte[] otIdBytes = ByteFunctions.ReadIntegerToBytes(otId, 2);
+
+            Array.Copy(otIdBytes, 0, this.saveFileBytes, 0x2605, 2);
+        }
+
         public int ReadHoursPlayed() {
             // In Generation 1, hours played is stored in 1 byte at 0x2CED
             int hoursPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CED, 1);
 
             return hoursPlayed;
+        }
+
+        private void WriteHoursPlayed(int hours) {
+            byte[] hoursBytes = ByteFunctions.ReadIntegerToBytes(hours, 1);
+
+            Array.Copy(hoursBytes, 0, this.saveFileBytes, 0x2CED, 1);
         }
 
         public int ReadMinsPlayed() {
