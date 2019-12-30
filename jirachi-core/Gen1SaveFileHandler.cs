@@ -153,6 +153,12 @@ namespace jirachi_core {
             return rivalName;
         }
 
+        private void WriteRivalName(string name) {
+            byte[] rivalNameBytes = new byte[11];
+
+
+        }
+
         public string ReadTrainerName() {
             // In Generation 1, trainer name is stored in 11 bytes starting at 0x2598
             byte[] trainerNameBytes = new byte[11];
@@ -243,6 +249,40 @@ namespace jirachi_core {
             }
 
             return decodedText;
+        }
+
+        public static byte[] PkmnTextEncode(string decoded) {
+            Dictionary<int, string> EncodeLookup = new Dictionary<int, string>();
+
+            // Encoding mappings for A-Z and a-z
+            for (int i = 0x80; i < 0x99; i++) {
+                EncodeLookup.Add(i, Char.ConvertFromUtf32(i - 63)); // for A-Z mapping
+                EncodeLookup.Add(i + 0x20, Char.ConvertFromUtf32(i - 63)); // for a-z mapping
+            }
+
+            // Add in the additional special characters
+            EncodeLookup.Add(0x9A, "(");
+            EncodeLookup.Add(0x9B, ")");
+            EncodeLookup.Add(0x9C, ":");
+            EncodeLookup.Add(0x9D, ";");
+            EncodeLookup.Add(0x9E, "[");
+            EncodeLookup.Add(0x9F, "]");
+            EncodeLookup.Add(0xE1, "{pk}");
+            EncodeLookup.Add(0xE2, "{mn}");
+            EncodeLookup.Add(0xE3, "-");
+            EncodeLookup.Add(0xE5, "?");
+            EncodeLookup.Add(0xE6, "!");
+            EncodeLookup.Add(0xEF, "{male}");
+            EncodeLookup.Add(0xF5, "{female}");
+            EncodeLookup.Add(0xF3, "/");
+            EncodeLookup.Add(0xF2, ".");
+            EncodeLookup.Add(0xF4, ",");
+
+            byte stringTerminator = 0x50;
+
+            byte[] encodedBytes = new byte[0];
+
+            return encodedBytes;
         }
 
         public static ItemModel ReadItemFromBytes(byte[] bytes) {
