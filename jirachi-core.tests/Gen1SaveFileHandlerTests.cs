@@ -263,7 +263,7 @@ namespace jirachi_core.tests {
             gen1Game.TrainerID = otID;
             gen1Save.WriteSaveFileBytes(gen1Game);
 
-            // Since we have already tested ReadCoins, we can use it in this test
+            // Since we have already tested ReadTrainerID, we can use it in this test
             int actual = gen1Save.ReadTrainerID();
 
             // Assert
@@ -283,11 +283,68 @@ namespace jirachi_core.tests {
             gen1Game.HoursPlayed = hours;
             gen1Save.WriteSaveFileBytes(gen1Game);
 
-            // Since we have already tested ReadCoins, we can use it in this test
+            // Since we have already tested ReadHours, we can use it in this test
             int actual = gen1Save.ReadHoursPlayed();
 
             // Assert
             Assert.Equal(hours, actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(59)]
+        public void Gen1SaveFileHandler_ShouldWriteMinsPlayed(int mins) {
+            Gen1SaveFileHandler gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel gen1Game = gen1Save.ReadSaveFile();
+
+            // Act
+            gen1Game.MinsPlayed = mins;
+            gen1Save.WriteSaveFileBytes(gen1Game);
+
+            // Since we have already tested ReadMinsPlayed, we can use it in this test
+            int actual = gen1Save.ReadMinsPlayed();
+
+            // Assert
+            Assert.Equal(mins, actual);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(33)]
+        public void Gen1SaveFileHandler_ShouldWriteSecsPlayed(int secs) {
+            Gen1SaveFileHandler gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel gen1Game = gen1Save.ReadSaveFile();
+
+            // Act
+            gen1Game.SecsPlayed = secs;
+            gen1Save.WriteSaveFileBytes(gen1Game);
+
+            // Since we have already tested ReadSecsPlayed, we can use it in this test
+            int actual = gen1Save.ReadSecsPlayed();
+
+            // Assert
+            Assert.Equal(secs, actual);
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(11)]
+        [InlineData(99)]
+        public void Gen1SaveFileHandler_ShouldWriteFramesPlayed(int frames) {
+            Gen1SaveFileHandler gen1Save = new Gen1SaveFileHandler(this.pathToDemoSave);
+            GameModel gen1Game = gen1Save.ReadSaveFile();
+
+            // Act
+            gen1Game.FramesPlayed = frames;
+            gen1Save.WriteSaveFileBytes(gen1Game);
+
+            // Since we have already tested ReadFramesPlayed, we can use it in this test
+            int actual = gen1Save.ReadFramesPlayed();
+
+            // Assert
+            Assert.Equal(frames, actual);
         }
     }
 }
