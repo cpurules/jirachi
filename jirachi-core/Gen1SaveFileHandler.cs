@@ -45,6 +45,9 @@ namespace jirachi_core {
             this.WriteCoins(saveGame.Coins);
             this.WriteTrainerID(saveGame.TrainerID);
             this.WriteHoursPlayed(saveGame.HoursPlayed);
+            this.WriteMinsPlayed(saveGame.MinsPlayed);
+            this.WriteSecsPlayed(saveGame.SecsPlayed);
+            this.WriteFramesPlayed(saveGame.FramesPlayed);
         }
 
         public int ReadMoney() {
@@ -109,6 +112,12 @@ namespace jirachi_core {
             return minsPlayed;
         }
 
+        private void WriteMinsPlayed(int mins) {
+            byte[] minsBytes = ByteFunctions.ReadIntegerToBytes(mins, 1);
+
+            Array.Copy(minsBytes, 0, this.saveFileBytes, 0x2CEF, 1);
+        }
+
         public int ReadSecsPlayed() {
             // In Generation 1, seconds played is stored in 1 byte at 0x2CF0
             int secsPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CF0, 1);
@@ -116,11 +125,23 @@ namespace jirachi_core {
             return secsPlayed;
         }
 
+        private void WriteSecsPlayed(int secs) {
+            byte[] secsBytes = ByteFunctions.ReadIntegerToBytes(secs, 1);
+
+            Array.Copy(secsBytes, 0, this.saveFileBytes, 0x2CF0, 1);
+        }
+
         public int ReadFramesPlayed() {
             // In Generation 1, frames played is stored in 1 byte at 0x2CF1
             int framesPlayed = ByteFunctions.ReadBytesToInteger(this.saveFileBytes, 0x2CF1, 1);
 
             return framesPlayed;
+        }
+
+        private void WriteFramesPlayed(int frames) {
+            byte[] framesBytes = ByteFunctions.ReadIntegerToBytes(frames, 1);
+
+            Array.Copy(framesBytes, 0, this.saveFileBytes, 0x2CF1, 1);
         }
 
         public string ReadRivalName() {
