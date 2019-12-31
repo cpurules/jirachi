@@ -217,6 +217,7 @@ namespace jirachi_core {
             }
 
             // Add in the additional special characters
+            EncodeLookup.Add(0xF1, "{times}");
             EncodeLookup.Add(0x9A, "(");
             EncodeLookup.Add(0x9B, ")");
             EncodeLookup.Add(0x9C, ":");
@@ -262,6 +263,7 @@ namespace jirachi_core {
             }
 
             // Add in the additional special characters
+            EncodeLookup.Add(0xF1, "{times}");
             EncodeLookup.Add(0x9A, "(");
             EncodeLookup.Add(0x9B, ")");
             EncodeLookup.Add(0x9C, ":");
