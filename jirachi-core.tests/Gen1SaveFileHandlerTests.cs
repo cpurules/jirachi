@@ -351,6 +351,7 @@ namespace jirachi_core.tests {
         [InlineData("ASH", new byte[] { 0x80, 0x92, 0x87, 0x50 })]
         [InlineData("Gary", new byte[] { 0x86, 0xA0, 0xB1, 0xB8, 0x50 })]
         [InlineData("M{male}F{female}P{pk}M{mn}", new byte[] { 0x8C, 0xEF, 0x85, 0xF5, 0x8F, 0xE1, 0x8C, 0xE2, 0x50 })]
+        [InlineData("!?{times}/", new byte[] { 0xE6, 0xE5, 0xF1, 0xF3, 0x50 })]
         public void Gen1SaveFileHandler_ShouldConvertStringToEncoded(string name, byte[] expected) {
             byte[] actual = Gen1SaveFileHandler.PkmnTextEncode(name);
             Assert.Equal(expected, actual);
