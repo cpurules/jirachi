@@ -213,7 +213,7 @@ namespace jirachi_core {
             // Encoding mappings for A-Z and a-z
             for(int i = 0x80; i < 0x99; i++) {
                 EncodeLookup.Add(i, Char.ConvertFromUtf32(i - 63)); // for A-Z mapping
-                EncodeLookup.Add(i + 0x20, Char.ConvertFromUtf32(i - 63)); // for a-z mapping
+                EncodeLookup.Add(i + 0x20, Char.ConvertFromUtf32(i + 0x20 - 63)); // for a-z mapping
             }
 
             // Add in the additional special characters
