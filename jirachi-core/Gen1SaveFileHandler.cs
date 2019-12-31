@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace jirachi_core {
     public class Gen1SaveFileHandler : ISaveFileHandler {
@@ -257,7 +258,7 @@ namespace jirachi_core {
             // Encoding mappings for A-Z and a-z
             for (int i = 0x80; i < 0x99; i++) {
                 EncodeLookup.Add(i, Char.ConvertFromUtf32(i - 63)); // for A-Z mapping
-                EncodeLookup.Add(i + 0x20, Char.ConvertFromUtf32(i - 63)); // for a-z mapping
+                EncodeLookup.Add(i + 0x20, Char.ConvertFromUtf32(i + 0x20 - 63)); // for a-z mapping
             }
 
             // Add in the additional special characters
@@ -280,7 +281,22 @@ namespace jirachi_core {
 
             byte stringTerminator = 0x50;
 
-            byte[] encodedBytes = new byte[0];
+            int encodedBytesLength = Regex.Replace(decoded, "([^{}])|({.+?})", "x").Length;
+            byte[] encodedBytes = new byte[encodedBytesLength + 1];
+
+            for(int i = 0, byteIndex = 0; i < decoded.Length; i++, byteIndex++) {
+                string currentChar = decoded.Substring(i, 1);
+                if (currentChar == "{") {
+                    int endBraceIndex = decoded.IndexOf("}", i);
+                    currentChar = decoded.Substring(i, endBraceIndex - i + 1);
+                    i = endBraceIndex;
+                }
+
+                byte encodedByte = Convert.ToByte(EncodeLookup.FirstOrDefault(x => x.Value == currentChar).Key);
+                encodedBytes[byteIndex] = encodedByte;
+            }
+
+            encodedBytes[encodedBytesLength] = 0x50;
 
             return encodedBytes;
         }
