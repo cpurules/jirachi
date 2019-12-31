@@ -298,7 +298,7 @@ namespace jirachi_core {
                 encodedBytes[byteIndex] = encodedByte;
             }
 
-            encodedBytes[encodedBytesLength] = 0x50;
+            encodedBytes[encodedBytesLength] = stringTerminator;
 
             return encodedBytes;
         }
